@@ -1,0 +1,59 @@
+:root {
+  /* AA Brand Colors */
+  --aa-navy: #1e3a8a;
+  --aa-white: #ffffff;
+  --aa-accent: #3b82f6;
+  
+  /* Extended Color Palette */
+  --aa-gray-50: #f9fafb;
+  --aa-gray-100: #f3f4f6;
+  --aa-gray-200: #e5e7eb;
+  --aa-gray-300: #d1d5db;
+  --aa-gray-400: #9ca3af;
+  --aa-gray-500: #6b7280;
+  --aa-gray-600: #4b5563;
+  --aa-gray-700: #374151;
+  --aa-gray-800: #1f2937;
+  --aa-gray-900: #111827;
+  
+  /* Semantic Colors */
+  --aa-success: #10b981;
+  --aa-warning: #f59e0b;
+  --aa-error: #ef4444;
+  --aa-info: #3b82f6;
+  
+  /* Spacing */
+  --aa-spacing-xs: 0.25rem;
+  --aa-spacing-sm: 0.5rem;
+  --aa-spacing-md: 1rem;
+  --aa-spacing-lg: 1.5rem;
+  --aa-spacing-xl: 2rem;
+  --aa-spacing-2xl: 3rem;
+  
+  /* Typography */
+  --aa-font-size-xs: 0.75rem;
+  --aa-font-size-sm: 0.875rem;
+  --aa-font-size-base: 1rem;
+  --aa-font-size-lg: 1.125rem;
+  --aa-font-size-xl: 1.25rem;
+  --aa-font-size-2xl: 1.5rem;
+  --aa-font-size-3xl: 1.875rem;
+  
+  /* Border Radius */
+  --aa-radius-sm: 0.25rem;
+  --aa-radius-md: 0.375rem;
+  --aa-radius-lg: 0.5rem;
+  --aa-radius-xl: 0.75rem;
+  --aa-radius-full: 9999px;
+  
+  /* Shadows */
+  --aa-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --aa-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --aa-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  /* Transitions */
+  --aa-transition-fast: 150ms ease-in-out;
+  --aa-transition-normal: 250ms ease-in-out;
+  --aa-transition-slow: 350ms ease-in-out;
+}
+
