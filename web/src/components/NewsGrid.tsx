@@ -1,0 +1,246 @@
+'use client'
+
+import { useState } from 'react'
+
+const newsData = [
+  {
+    id: 1,
+    title: "Yapay Zeka Teknolojileri Türkiye'de Hızla Gelişiyor",
+    summary: "Türk şirketlerinin yapay zeka alanındaki yatırımları son 6 ayda %150 arttı.",
+    image: "/images/istanbul.jpg",
+    category: "Teknoloji",
+    readTime: "4 dk",
+    xp: 22,
+    likes: 156,
+    comments: 23,
+    publishedAt: "2024-01-15T10:30:00Z"
+  },
+  {
+    id: 2,
+    title: "İstanbul'da Yeni Metro Hattı Açıldı",
+    summary: "Şehir içi ulaşımda yeni dönem başlıyor. Günlük 500 bin yolcu kapasitesi.",
+    image: "/images/istanbul.jpg",
+    category: "Ulaşım",
+    readTime: "3 dk",
+    xp: 18,
+    likes: 89,
+    comments: 12,
+    publishedAt: "2024-01-15T09:15:00Z"
+  },
+  {
+    id: 3,
+    title: "Milli Takım Avrupa Şampiyonası'na Hazırlanıyor",
+    summary: "Teknik direktör Montella yeni stratejisini açıkladı.",
+    image: "/images/istanbul.jpg",
+    category: "Spor",
+    readTime: "5 dk",
+    xp: 25,
+    likes: 234,
+    comments: 45,
+    publishedAt: "2024-01-15T08:45:00Z"
+  },
+  {
+    id: 4,
+    title: "Ekonomide Büyüme Rakamları Açıklandı",
+    summary: "2024'ün ilk çeyreğinde %4.2 büyüme kaydedildi.",
+    image: "/images/istanbul.jpg",
+    category: "Ekonomi",
+    readTime: "6 dk",
+    xp: 30,
+    likes: 178,
+    comments: 67,
+    publishedAt: "2024-01-15T07:30:00Z"
+  },
+  {
+    id: 5,
+    title: "Eğitimde Dijital Dönüşüm Projesi",
+    summary: "Tüm okullarda tablet dağıtımı tamamlandı.",
+    image: "/images/istanbul.jpg",
+    category: "Eğitim",
+    readTime: "4 dk",
+    xp: 20,
+    likes: 92,
+    comments: 18,
+    publishedAt: "2024-01-15T06:00:00Z"
+  },
+  {
+    id: 6,
+    title: "Sağlık Sektöründe Yenilikçi Yaklaşım",
+    summary: "Telemedicine uygulamaları yaygınlaşıyor.",
+    image: "/images/istanbul.jpg",
+    category: "Sağlık",
+    readTime: "7 dk",
+    xp: 28,
+    likes: 145,
+    comments: 31,
+    publishedAt: "2024-01-15T05:20:00Z"
+  }
+]
+
+const categories = ['Tümü', 'Teknoloji', 'Ekonomi', 'Spor', 'Ulaşım', 'Eğitim', 'Sağlık']
+
+export default function NewsGrid() {
+  const [selectedCategory, setSelectedCategory] = useState('Tümü')
+  const [readNews, setReadNews] = useState<number[]>([])
+  const [likedNews, setLikedNews] = useState<number[]>([])
+
+  const filteredNews = selectedCategory === 'Tümü' 
+    ? newsData 
+    : newsData.filter(news => news.category === selectedCategory)
+
+  const handleRead = (newsId: number, xp: number) => {
+    if (!readNews.includes(newsId)) {
+      setReadNews([...readNews, newsId])
+      // XP earning animation would trigger here
+    }
+  }
+
+  const handleLike = (newsId: number) => {
+    if (likedNews.includes(newsId)) {
+      setLikedNews(likedNews.filter(id => id !== newsId))
+    } else {
+      setLikedNews([...likedNews, newsId])
+    }
+  }
+
+  const getCategoryColor = (category: string) => {
+    const colors = {
+      'Teknoloji': 'bg-purple-100 text-purple-700 border-purple-200',
+      'Ekonomi': 'bg-blue-100 text-blue-700 border-blue-200',
+      'Spor': 'bg-green-100 text-green-700 border-green-200',
+      'Ulaşım': 'bg-orange-100 text-orange-700 border-orange-200',
+      'Eğitim': 'bg-indigo-100 text-indigo-700 border-indigo-200',
+      'Sağlık': 'bg-pink-100 text-pink-700 border-pink-200'
+    }
+    return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-700 border-gray-200'
+  }
+
+  return (
+    <section className="space-y-6">
+      {/* Category Filter */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-slate-800">📰 Güncel Haberler</h2>
+        <div className="flex gap-2 overflow-x-auto">
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                selectedCategory === category
+                  ? 'bg-brand-blue text-white shadow-lg transform scale-105'
+                  : 'bg-white/80 text-slate-700 border border-cream-strong hover:bg-brand-blue/10 hover:border-brand-blue/30'
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* News Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredNews.map((news) => (
+          <article
+            key={news.id}
+            className={`group bg-white/80 backdrop-blur rounded-2xl overflow-hidden border transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] cursor-pointer ${
+              readNews.includes(news.id)
+                ? 'border-green-200 bg-green-50/50'
+                : 'border-cream-strong hover:border-brand-blue/30'
+            }`}
+            onClick={() => handleRead(news.id, news.xp)}
+          >
+            {/* Image */}
+            <div className="relative h-48 overflow-hidden">
+              <img
+                src={news.image}
+                alt={news.title}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              
+              {/* Category Badge */}
+              <div className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold border ${getCategoryColor(news.category)}`}>
+                {news.category}
+              </div>
+              
+              {/* XP Badge */}
+              <div className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-bold ${
+                readNews.includes(news.id)
+                  ? 'bg-green-500 text-white'
+                  : 'bg-amber-500 text-white'
+              }`}>
+                {readNews.includes(news.id) ? '✅' : `+${news.xp} XP`}
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-5">
+              <h3 className={`font-bold text-lg mb-2 leading-tight group-hover:text-brand-blue transition-colors ${
+                readNews.includes(news.id) ? 'text-green-800' : 'text-slate-800'
+              }`}>
+                {news.title}
+              </h3>
+              
+              <p className="text-slate-600 text-sm mb-4 leading-relaxed line-clamp-2">
+                {news.summary}
+              </p>
+              
+              {/* Meta Info */}
+              <div className="flex items-center justify-between text-xs text-slate-500 mb-4">
+                <span>📖 {news.readTime} okuma</span>
+                <span>{new Date(news.publishedAt).toLocaleDateString('tr-TR')}</span>
+              </div>
+              
+              {/* Actions */}
+              <div className="flex items-center justify-between pt-3 border-t border-cream-strong">
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleLike(news.id)
+                    }}
+                    className={`flex items-center gap-1 transition-colors ${
+                      likedNews.includes(news.id)
+                        ? 'text-red-500'
+                        : 'text-slate-500 hover:text-red-500'
+                    }`}
+                  >
+                    <span className="text-sm">❤️</span>
+                    <span className="text-xs font-medium">
+                      {news.likes + (likedNews.includes(news.id) ? 1 : 0)}
+                    </span>
+                  </button>
+                  
+                  <button className="flex items-center gap-1 text-slate-500 hover:text-brand-blue transition-colors">
+                    <span className="text-sm">💬</span>
+                    <span className="text-xs font-medium">{news.comments}</span>
+                  </button>
+                  
+                  <button className="flex items-center gap-1 text-slate-500 hover:text-brand-blue transition-colors">
+                    <span className="text-sm">📤</span>
+                    <span className="text-xs font-medium">Paylaş</span>
+                  </button>
+                </div>
+                
+                <button className={`text-xs font-bold px-3 py-1 rounded-full transition-all ${
+                  readNews.includes(news.id)
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-brand-blue text-white hover:bg-blue-700'
+                }`}>
+                  {readNews.includes(news.id) ? 'Okundu' : 'Oku'}
+                </button>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {/* Load More */}
+      <div className="text-center pt-8">
+        <button className="bg-white/80 backdrop-blur border border-cream-strong text-slate-700 px-8 py-3 rounded-xl font-medium hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-all duration-200 shadow-lg hover:shadow-xl">
+          Daha Fazla Haber Yükle
+        </button>
+      </div>
+    </section>
+  )
+}
