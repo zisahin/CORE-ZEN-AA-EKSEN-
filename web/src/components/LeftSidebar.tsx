@@ -3,18 +3,18 @@
 import { useState } from 'react'
 
 const menuItems = [
-  { label: 'Anasayfa', icon: '🏠', active: true },
-  { label: 'Son Dakika', icon: '⚡', badge: '3' },
-  { label: 'Gündem', icon: '📰' },
-  { label: 'Ekonomi', icon: '💰' },
-  { label: 'Spor', icon: '⚽' },
-  { label: 'Teknoloji', icon: '💻' },
-  { label: 'Dünya', icon: '🌍' },
-  { label: 'Haber Haritası', icon: '🗺️' },
-  { label: 'İhtiyaç Hattı', icon: '🤝' },
-  { label: 'Oyunlar', icon: '🎮', badge: 'YENİ' },
-  { label: 'Podcast', icon: '🎧' },
-  { label: 'Liderlik', icon: '👔' }
+  { label: 'Anasayfa', active: true },
+  { label: 'Son Dakika', badge: '3' },
+  { label: 'Gündem' },
+  { label: 'Ekonomi' },
+  { label: 'Spor'  },
+  { label: 'Teknoloji' },
+  { label: 'Dünya'  },
+  { label: 'Haber Haritası', badge: 'YENİ'},
+  { label: 'İhtiyaç Hattı'  },
+  { label: 'Oyunlar', badge: 'YENİ' },
+  { label: 'Podcast'  },
+  { label: 'Liderlik',  badge: 'YENİ' }
 ]
 
 export default function LeftSidebar() {
@@ -64,7 +64,6 @@ export default function LeftSidebar() {
               }`}
             >
               <div className="flex items-center gap-3">
-                <span className="text-base">{item.icon}</span>
                 <span>{item.label}</span>
               </div>
               {item.badge && (
@@ -85,10 +84,11 @@ export default function LeftSidebar() {
 
       {/* Bottom Action */}
       <div className="p-4 mt-auto border-t border-cream-strong">
-        <button className="w-full bg-gradient-to-r from-amber-400 to-orange-500 text-white px-4 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+        <button className="w-full bg-gradient-to-r from-blue-600 to-black text-white px-4 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
           ⚡ Günlük Bonus Al
         </button>
       </div>
     </aside>
   )
 }
+

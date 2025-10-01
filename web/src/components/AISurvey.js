@@ -71,7 +71,7 @@ export default function AISurvey() {
       <div className="bg-white rounded-xl p-6 max-w-md mx-4 shadow-xl">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-2">
-            <span className="text-2xl">🤖</span>
+            <span className="text-2xl"></span>
             <h3 className="font-bold text-blue-800">AA AI Soruyor</h3>
           </div>
           <button 
@@ -158,7 +158,7 @@ export function InlineAISurvey({ fetchSurvey }) {
     <div className="bg-white border rounded-xl p-4 md:p-5 shadow-sm">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center space-x-2">
-          <span className="text-xl">🤖</span>
+          <span className="text-xl"></span>
           <h3 className="font-bold text-blue-800">AI Soruyor</h3>
         </div>
         <span className="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs">+10 XP</span>

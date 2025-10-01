@@ -41,7 +41,7 @@ export default function MainHero() {
   }
 
   const currentItem = heroNews[currentNews]
-
+  const [savedNews, setSavedNews] = useState<number[]>([])
   return (
     <section className="relative">
       {/* Main Hero */}
@@ -60,7 +60,7 @@ export default function MainHero() {
                 {currentItem.category}
               </span>
               <span className="text-white/80 text-sm">
-                📖 {currentItem.readTime} okuma
+                 {currentItem.readTime} okuma
               </span>
               <span className="bg-amber-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                 +{currentItem.xp} XP
@@ -81,15 +81,33 @@ export default function MainHero() {
                 disabled={isReading}
                 className="bg-white text-brand-blue px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50"
               >
-                {isReading ? '📖 Okunuyor...' : '📰 Haberi Oku'}
+                {isReading ? ' Okunuyor...' : ' Haberi Oku'}
               </button>
               
-              <button className="bg-white/20 backdrop-blur text-white px-4 py-3 rounded-xl font-medium hover:bg-white/30 transition-all duration-200">
-                🔖 Kaydet
+              <button 
+                onClick={() => {
+                  if (savedNews.includes(currentItem.id)) {
+                    setSavedNews(savedNews.filter(id => id !== currentItem.id))
+                  } else {
+                    setSavedNews([...savedNews, currentItem.id])
+                  }
+                }}
+                className="bg-white/20 backdrop-blur text-white px-4 py-3 rounded-xl font-medium hover:bg-white/30 transition-all duration-200 flex items-center gap-2"
+              >
+                <img 
+                  src={savedNews.includes(currentItem.id)
+                    ? "/images/save-filled.png"
+                    : "/images/save-empty.png"
+                  }
+                  alt="Kaydet" 
+                  className="w-5 h-5"
+                />
+                {savedNews.includes(currentItem.id) ? 'Kaydedildi' : 'Kaydet'}
               </button>
               
-              <button className="bg-white/20 backdrop-blur text-white px-4 py-3 rounded-xl font-medium hover:bg-white/30 transition-all duration-200">
-                📤 Paylaş
+              <button className="bg-white/20 backdrop-blur text-white pl-3 pr-4 py-2 rounded-xl font-medium hover:bg-white/30 transition-all duration-200 flex items-center gap-1">
+                <img src="/images/share-white.png" alt="Paylaş" className="w-5 h-5" />
+                Paylaş
               </button>
             </div>
           </div>
@@ -110,7 +128,7 @@ export default function MainHero() {
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-3 gap-4 mt-6">
+     {/* <div className="grid grid-cols-3 gap-4 mt-6">
         <div className="bg-white/80 backdrop-blur rounded-xl p-4 text-center border border-cream-strong shadow-lg">
           <div className="text-2xl font-bold text-brand-blue">1,250</div>
           <div className="text-sm text-slate-600">Toplam XP</div>
@@ -123,7 +141,8 @@ export default function MainHero() {
           <div className="text-2xl font-bold text-amber-600">12</div>
           <div className="text-sm text-slate-600">Seviye</div>
         </div>
-      </div>
+      </div>"*/}
     </section>
   )
 }
+

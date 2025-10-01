@@ -119,7 +119,7 @@ export default function NewsGrid() {
     <section className="space-y-6">
       {/* Category Filter */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-slate-800">📰 Güncel Haberler</h2>
+        <h2 className="text-2xl font-bold text-slate-800"> Güncel Haberler</h2>
         <div className="flex gap-2 overflow-x-auto">
           {categories.map((category) => (
             <button
@@ -162,15 +162,6 @@ export default function NewsGrid() {
               <div className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold border ${getCategoryColor(news.category)}`}>
                 {news.category}
               </div>
-              
-              {/* XP Badge */}
-              <div className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-bold ${
-                readNews.includes(news.id)
-                  ? 'bg-green-500 text-white'
-                  : 'bg-amber-500 text-white'
-              }`}>
-                {readNews.includes(news.id) ? '✅' : `+${news.xp} XP`}
-              </div>
             </div>
 
             {/* Content */}
@@ -187,37 +178,38 @@ export default function NewsGrid() {
               
               {/* Meta Info */}
               <div className="flex items-center justify-between text-xs text-slate-500 mb-4">
-                <span>📖 {news.readTime} okuma</span>
+                <span> {news.readTime} okuma</span>
                 <span>{new Date(news.publishedAt).toLocaleDateString('tr-TR')}</span>
               </div>
               
               {/* Actions */}
               <div className="flex items-center justify-between pt-3 border-t border-cream-strong">
                 <div className="flex items-center gap-4">
+
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
                       handleLike(news.id)
                     }}
-                    className={`flex items-center gap-1 transition-colors ${
-                      likedNews.includes(news.id)
-                        ? 'text-red-500'
-                        : 'text-slate-500 hover:text-red-500'
-                    }`}
+                    className="flex items-center gap-1 transition-all duration-200"
                   >
-                    <span className="text-sm">❤️</span>
-                    <span className="text-xs font-medium">
+                    <img 
+                      src={likedNews.includes(news.id) 
+                        ? "/images/like-filled.png"
+                        : "/images/like-empty.png"
+                      }
+                      alt="Beğen" 
+                      className="w-5 h-5"
+                    />
+                    <span className={`text-xs font-medium ${
+                      likedNews.includes(news.id) ? 'text-red-500' : 'text-slate-500'
+                    }`}>
                       {news.likes + (likedNews.includes(news.id) ? 1 : 0)}
                     </span>
                   </button>
-                  
+              
                   <button className="flex items-center gap-1 text-slate-500 hover:text-brand-blue transition-colors">
-                    <span className="text-sm">💬</span>
-                    <span className="text-xs font-medium">{news.comments}</span>
-                  </button>
-                  
-                  <button className="flex items-center gap-1 text-slate-500 hover:text-brand-blue transition-colors">
-                    <span className="text-sm">📤</span>
+                    <img src="/images/share.png" alt="Paylaş" className="w-6 h-6" />
                     <span className="text-xs font-medium">Paylaş</span>
                   </button>
                 </div>
@@ -244,3 +236,4 @@ export default function NewsGrid() {
     </section>
   )
 }
+

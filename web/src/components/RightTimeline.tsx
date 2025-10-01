@@ -43,8 +43,7 @@ const timelineNews = [
 
 const aiSuggestions = [
   "Size özel ekonomi analizi hazırladık",
-  "Spor haberlerinde yeni gelişmeler var",
-  "Bu haberi arkadaşlarınız da okudu"
+  "Spor haberlerinde yeni gelişmeler var"
 ]
 
 export default function RightTimeline() {
@@ -63,15 +62,14 @@ export default function RightTimeline() {
       {/* AI Assistant */}
       <div className="p-4 bg-gradient-to-br from-brand-blue/10 to-purple-50 border-b border-cream-strong">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-brand-blue to-purple-600 rounded-full flex items-center justify-center">
-            <span className="text-white text-sm">🤖</span>
+          <div className="w-8 h-8 rounded-full overflow-hidden">
+            <img src="/images/ai-assistant.png" alt="AI" className="w-full h-full object-cover" />
           </div>
           <div>
             <h3 className="font-bold text-brand-blue text-sm">AA AI Asistan</h3>
-            <p className="text-xs text-slate-500">Kişisel haber analisti</p>
+            <p className="text-xs text-slate-500">Kişisel Haber Analisti</p>
           </div>
         </div>
-        
         <div className="bg-white/80 backdrop-blur rounded-xl p-3 border border-white/50 shadow-lg">
           <p className="text-sm text-slate-700 mb-2">
             {aiSuggestions[currentSuggestion]}
@@ -91,15 +89,21 @@ export default function RightTimeline() {
         <h4 className="text-sm font-bold text-slate-800 mb-1">
           Kritik Gelişme: Ekonomik Paket Açıklandı
         </h4>
-        <button className="text-xs text-red-600 font-medium hover:underline">
-          🔥 Hemen Oku (+30 XP)
-        </button>
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+            <div className="absolute top-0 left-0 w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
+          </div>
+          <button className="text-xs text-red-600 font-medium hover:underline">
+            Hemen Oku 
+          </button>
+        </div>
       </div>
 
       {/* Timeline Header */}
       <div className="p-4 border-b border-cream-strong">
         <div className="flex items-center justify-between">
-          <h3 className="font-bold text-slate-800">📈 Canlı Haber Akışı</h3>
+          <h3 className="font-bold text-slate-800"> Canlı Haber Akışı</h3>
           <button className="text-xs text-brand-blue hover:underline">Tümü</button>
         </div>
         <p className="text-xs text-slate-500 mt-1">Son 3 saatteki gelişmeler</p>
@@ -158,22 +162,23 @@ export default function RightTimeline() {
       {/* Daily Challenge */}
       <div className="p-4 border-t border-cream-strong bg-gradient-to-br from-amber-50 to-yellow-50">
         <div className="text-center">
-          <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-2">
-            <span className="text-white text-xl">🎯</span>
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-black rounded-full flex items-center justify-center mx-auto mb-2">
+            <span className="text-white text-xl"></span>
           </div>
           <h4 className="font-bold text-slate-800 text-sm mb-1">Günlük Meydan Okuma</h4>
           <p className="text-xs text-slate-600 mb-3">5 farklı kategoriden haber oku</p>
           
           <div className="bg-white/80 rounded-full h-2 mb-2 overflow-hidden">
-            <div className="bg-gradient-to-r from-amber-400 to-orange-500 h-full w-3/5 transition-all duration-500"></div>
+            <div className="bg-gradient-to-r from-blue-400 to-black h-full w-3/5 transition-all duration-500"></div>
           </div>
           
           <div className="flex justify-between text-xs">
             <span className="text-slate-500">3/5 tamamlandı</span>
-            <span className="font-bold text-amber-600">+50 XP</span>
+            <span className="font-bold text-blue-900">+50 XP</span>
           </div>
         </div>
       </div>
     </aside>
   )
 }
+

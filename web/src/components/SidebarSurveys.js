@@ -96,7 +96,7 @@ export default function SidebarSurveys() {
                 ✅ Cevabınız: {results[survey.id]?.userAnswer}
               </div>
               <div className="text-xs text-gray-500">
-                📊 {results[survey.id]?.totalVotes} kişi katıldı
+                 {results[survey.id]?.totalVotes} kişi katıldı
               </div>
               <div className="text-xs bg-blue-100 text-blue-900 px-2 py-1 rounded-full inline-block">
                 +5 XP
