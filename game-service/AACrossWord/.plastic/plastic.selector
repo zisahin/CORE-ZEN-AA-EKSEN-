@@ -1,4 +1,0 @@
-repository "AACrossWord/AACrossWord@18968332778758@cloud"
-  path "/"
-    br "/main"
-    co "/main"
