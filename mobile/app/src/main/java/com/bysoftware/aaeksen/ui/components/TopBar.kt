@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
 fun TopBar() {
     TopAppBar(
         title = { },
@@ -48,5 +47,11 @@ fun TopBar() {
             containerColor = Color.White
         )
     )
+}
+
+@Preview
+@Composable
+fun TopBarPreview() {
+    TopBar()
 }
 

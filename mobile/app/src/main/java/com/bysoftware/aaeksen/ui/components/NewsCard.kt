@@ -2,12 +2,14 @@ package com.bysoftware.aaeksen.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,7 +33,11 @@ fun BreakingNewsCard(
     Card(
         modifier = modifier
             .height(200.dp)
-            .clickable { onClick() },
+            .clickable(
+                onClick = onClick,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -162,7 +168,11 @@ fun RecommendedNewsCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() },
+            .clickable(
+                onClick = onClick,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
     ) {
@@ -170,7 +180,7 @@ fun RecommendedNewsCard(
             modifier = Modifier.padding(vertical = 8.dp)
         ) {
             AsyncImage(
-                model = "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=300&h=200&fit=crop",
+                model = newsItem.imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -249,7 +259,7 @@ fun BreakingNewsCardPreview() {
                 source = "BBC",
                 date = "Sep 13, 2025",
                 category = "Technology",
-                isBreaking = true,
+                breaking = true,
                 imageUrl = "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&h=400&fit=crop",
                 readTime = "5 min read",
                 author = "John Doe",

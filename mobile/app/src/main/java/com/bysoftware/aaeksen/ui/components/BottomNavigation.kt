@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,15 +51,16 @@ import com.bysoftware.aaeksen.R
 @Composable
 fun CustomBottomBar(
     selectedIndex: Int,
+    isDarkTheme: Boolean = false,
     onItemSelected: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(72.dp)
-            .background(Color.White)
+            .background(if (isDarkTheme) Color.Black else Color.White)
     ) {
-        val items = listOf("Home", "Discover", "Center", "Saved", "Profile")
+        val items = listOf("Neews", "Oyunlar", "Center", "Harita", "Profil")
 
         Row(
             modifier = Modifier
@@ -82,7 +84,11 @@ fun CustomBottomBar(
                             )
                             .clip(RoundedCornerShape(10.dp))
                             .background(Color(0xFF01447b)) // AA mavisi
-                            .clickable { onItemSelected(index) },
+                            .clickable(
+                                onClick = { onItemSelected(index) },
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ),
                         contentAlignment = Alignment.Center,
 
                     ) {
@@ -95,29 +101,41 @@ fun CustomBottomBar(
                 } else {
                     // Normal itemler
                     val icon = when (item) {
-                        "Home" -> painterResource(R.drawable.home_gray)
-                        "Discover" -> painterResource(R.drawable.discover)
-                        "Saved" -> painterResource(R.drawable.saved_6)
-                        "Profile" -> painterResource(R.drawable.person)
+                        "Neews" -> painterResource(R.drawable.discover)
+                        "Oyunlar" -> painterResource(R.drawable.game)
+                        "Harita" -> painterResource(R.drawable.live_2989838)
+                                "Profil" -> painterResource(R.drawable.person)
                         else -> painterResource(R.drawable.person)
                     }
 
                     Column(
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { onItemSelected(index) },
+                            .clickable(
+                                onClick = { onItemSelected(index) },
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Icon(
                             painter = icon,
                             contentDescription = item,
-                            tint = if (selectedIndex == index) Color(0xFF004AAD) else Color.Gray,
+                            tint = if (selectedIndex == index) {
+                                Color(0xFF004AAD)
+                            } else {
+                                if (isDarkTheme) Color.White.copy(alpha = 0.7f) else Color.Gray
+                            },
                             modifier = Modifier.size(24.dp)
                         )
                         Text(
                             text = item,
                             fontSize = 12.sp,
-                            color = if (selectedIndex == index) Color(0xFF004AAD) else Color.Gray
+                            color = if (selectedIndex == index) {
+                                Color(0xFF004AAD)
+                            } else {
+                                if (isDarkTheme) Color.White.copy(alpha = 0.7f) else Color.Gray
+                            }
                         )
                     }
                 }
@@ -131,7 +149,15 @@ fun CustomBottomBar(
 @Preview
 fun BottomNavPreview(){
     AAEksenTheme {
-        CustomBottomBar(selectedIndex = 0, onItemSelected = {})
+        CustomBottomBar(selectedIndex = 0, isDarkTheme = false, onItemSelected = {})
+    }
+}
+
+@Composable
+@Preview
+fun BottomNavDarkPreview(){
+    AAEksenTheme {
+        CustomBottomBar(selectedIndex = 0, isDarkTheme = true, onItemSelected = {})
     }
 }
 

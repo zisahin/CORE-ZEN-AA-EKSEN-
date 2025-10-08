@@ -8,7 +8,7 @@ data class NewsItem(
     val source: String,
     val date: String,
     val category: String,
-    val isBreaking: Boolean = false,
+    val breaking: Boolean = false,
     val readTime: String? = null,
     val author: String? = null,
     val likes: Int = 0,

@@ -10,7 +10,7 @@ object SampleData {
             source = "CNN Indonesia",
             date = "Feb 28,2023",
             category = "World",
-            isBreaking = true
+            breaking = true
         ),
         NewsItem(
             id = "breaking2",
@@ -20,7 +20,7 @@ object SampleData {
             source = "BBC News",
             date = "Sep 13,2025",
             category = "World",
-            isBreaking = true
+            breaking = true
         ),
         NewsItem(
             id = "breaking3",
@@ -30,7 +30,7 @@ object SampleData {
             source = "TechCrunch",
             date = "Sep 13,2025",
             category = "Technology",
-            isBreaking = true
+            breaking = true
         )
     )
 

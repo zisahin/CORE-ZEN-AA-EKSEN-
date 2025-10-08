@@ -1,0 +1,162 @@
+# AA Eksen - Anadolu Ajansı Haber Platformu
+
+Modern Android haber uygulaması. Firebase backend, Mapbox harita entegrasyonu, Jetpack Compose UI ve Clean Architecture ile geliştirilmiştir.
+
+## 🚀 Özellikler
+
+- **📰 Haber Okuma**: Breaking news ve kategorize edilmiş haberler
+- **🗺️ Haber Haritası**: Türkiye haritasında il bazında haber yoğunluğu
+- **⏰ Zaman Tüneli**: Önemli olayların kronolojik takibi
+- **🎮 Oyunlar**: Çengel bulmaca, quiz ve harita tahmin oyunları
+- **🤖 AI Entegrasyonu**: Haber özetleme ve AI sohbet
+- **👤 Kullanıcı Profili**: XP sistemi, rozetler ve günlük görevler
+- **🔐 Güvenli Giriş**: Firebase Authentication ile giriş/kayıt
+
+## 🛠️ Teknolojiler
+
+- **UI**: Jetpack Compose
+- **Architecture**: Clean Architecture (MVVM + Repository Pattern)
+- **DI**: Hilt
+- **Backend**: Firebase (Firestore, Auth, Analytics, Crashlytics)
+- **Maps**: Mapbox SDK
+- **Image Loading**: Coil
+- **Navigation**: Navigation Compose
+
+## 📋 Kurulum
+
+### 1. Projeyi Klonlayın
+
+```bash
+git clone https://github.com/your-username/aa-eksen-mobile.git
+cd aa-eksen-mobile
+```
+
+### 2. API Anahtarlarını Yapılandırın
+
+#### a) `local.properties` Dosyası
+
+`local.properties.example` dosyasını `local.properties` olarak kopyalayın ve API anahtarlarınızı ekleyin:
+
+```properties
+# API Keys - Bu dosya git'e commit edilmez
+YOUTUBE_API_KEY=YOUR_YOUTUBE_API_KEY_HERE
+MAPBOX_ACCESS_TOKEN=YOUR_MAPBOX_ACCESS_TOKEN_HERE
+FIREBASE_API_KEY=YOUR_FIREBASE_API_KEY_HERE
+```
+
+#### b) Firebase Yapılandırması
+
+1. [Firebase Console](https://console.firebase.google.com/) üzerinden yeni bir proje oluşturun
+2. Android uygulaması ekleyin (Package name: `com.bysoftware.aaeksen`)
+3. `google-services.json` dosyasını indirin ve `app/` klasörüne koyun
+4. Firestore Database'i etkinleştirin
+5. Authentication'ı etkinleştirin (Email/Password ve Google)
+
+#### c) Mapbox Yapılandırması
+
+1. [Mapbox](https://account.mapbox.com/) hesabı oluşturun
+2. Access Token alın
+3. `local.properties` dosyasına ekleyin
+
+### 3. Firebase Verilerini Yükleyin
+
+Örnek verileri Firebase'e yüklemek için:
+
+1. `firebase_sample_data.json` dosyasındaki verileri Firebase Console üzerinden import edin
+2. Veya uygulama ilk açıldığında otomatik olarak yüklenecektir
+
+### 4. Uygulamayı Çalıştırın
+
+```bash
+./gradlew assembleDebug
+```
+
+## 🔒 Güvenlik
+
+Bu proje hassas API anahtarlarını güvenli bir şekilde yönetir:
+
+- ✅ `google-services.json` `.gitignore`'da
+- ✅ API anahtarları `local.properties`'de (git'e commit edilmez)
+- ✅ Örnek config dosyaları sağlanmıştır
+- ✅ Manifest'te placeholder kullanımı
+
+**Önemli**: Gerçek API anahtarlarınızı asla GitHub'a commit etmeyin!
+
+## 📱 Ekran Görüntüleri
+
+### Ana Ekran
+- Breaking News kartları
+- Kategori filtreleme
+- Önerilen haberler listesi
+
+### Haber Haritası
+- Türkiye haritası (Mapbox)
+- İl bazında haber yoğunluğu
+- Kategori bazında filtreleme
+
+### Profil Ekranı
+- Kullanıcı istatistikleri
+- Rozet sistemi
+- XP puanları ve ilerleme
+
+### Giriş/Kayıt
+- Modern UI tasarımı
+- Firebase Authentication
+- Google ile giriş seçeneği
+
+## 🏗️ Proje Yapısı
+
+```
+app/
+├── src/main/java/com/bysoftware/aaeksen/
+│   ├── core/                    # Core utilities ve constants
+│   ├── data/                    # Data layer (Repository, Firebase)
+│   ├── domain/                  # Domain models
+│   ├── presentation/            # ViewModels
+│   ├── ui/                      # UI components ve screens
+│   └── di/                      # Dependency Injection
+├── firebase_sample_data.json    # Örnek Firebase verileri
+├── FIREBASE_INTEGRATION.md      # Firebase entegrasyon rehberi
+└── README.md                    # Bu dosya
+```
+
+## 🔧 Geliştirme
+
+### Yeni Özellik Ekleme
+
+1. `feature/` branch oluşturun
+2. Clean Architecture prensiplerine uyun
+3. Unit testler yazın
+4. Pull Request açın
+
+### Firebase Koleksiyonları
+
+- `news` - Ana haberler
+- `time_tunnel_categories` - Zaman tüneli kategorileri
+- `users` - Kullanıcı profilleri
+- `crossword_categories` - Çengel bulmaca kategorileri
+- `quiz_categories` - Quiz kategorileri
+- `daily_tasks` - Günlük görevler
+- `badges` - Rozet sistemi
+
+## 📄 Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakın.
+
+## 🤝 Katkıda Bulunma
+
+1. Fork edin
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Commit edin (`git commit -m 'Add some amazing feature'`)
+4. Push edin (`git push origin feature/amazing-feature`)
+5. Pull Request açın
+
+## 📞 İletişim
+
+- **Geliştirici**: [Your Name]
+- **Email**: your.email@example.com
+- **LinkedIn**: [Your LinkedIn Profile]
+
+---
+
+⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!

@@ -11,6 +11,7 @@ val LightGray = Color(0xFFF1F5F9)
 val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)
 val iconColor = Color(0xFF7b7b7b)
+val aa_color = Color(0xFF01447b)
 
 // Legacy colors for compatibility
 val Purple80 = Color(0xFFD0BCFF)
