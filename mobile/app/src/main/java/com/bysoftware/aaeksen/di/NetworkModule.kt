@@ -41,7 +41,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://your-api-base-url.com/api/v1/") // BU URL'İ GÜNCELLEY!
+            .baseUrl("https://www.googleapis.com/youtube/v3/") // YouTube API base URL
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "904069495271",
+    "project_id": "aa-eksen-71097",
+    "storage_bucket": "aa-eksen-71097.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904069495271:android:645e41c348ff31886fa542",
+        "android_client_info": {
+          "package_name": "com.bysoftware.aaeksen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcbKyImNMAnpxKEuP8LHa9tnaiq6QE_yA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

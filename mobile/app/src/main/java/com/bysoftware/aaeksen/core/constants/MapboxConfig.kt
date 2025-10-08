@@ -2,7 +2,8 @@ package com.bysoftware.aaeksen.core.constants
 
 object MapboxConfig {
     // Mapbox Studio'dan aldığın Style URL'ini buraya ekle
-    const val STYLE_URL = "style"
+    const val STYLE_URL = "mapbox://styles/erkantr/cmg9lrv6500a301sa6vaxewfl"
+
     
     // Örnek:
     // const val STYLE_URL = "mapbox://styles/john-doe/ckf3fz7ad0r3u1amqwg4v8w2o"

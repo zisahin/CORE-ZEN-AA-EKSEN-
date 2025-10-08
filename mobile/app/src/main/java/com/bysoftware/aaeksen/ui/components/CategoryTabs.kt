@@ -2,6 +2,7 @@ package com.bysoftware.aaeksen.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.filled.SportsSoccer
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,14 +57,18 @@ fun CategoryTabItem(
         "Gaming" -> Icons.Default.SportsEsports
         else -> null
     }
-    
+
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
             .background(
                 if (category.isSelected) Color(0xFF2563EB) else Color(0xFFF1F5F9)
             )
-            .clickable { onClick() }
+            .clickable(
+                onClick = onClick,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            )
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -75,7 +81,7 @@ fun CategoryTabItem(
             )
             Spacer(modifier = Modifier.width(6.dp))
         }
-        
+
         Text(
             text = category.name,
             color = if (category.isSelected) Color.White else Color.Gray,

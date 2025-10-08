@@ -1,0 +1,48 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Haber görselleri - herkes okuyabilir, sadece adminler yazabilir
+    match /news/images/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Haber videoları - herkes okuyabilir, sadece adminler yazabilir
+    match /news/videos/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Shorts videoları - herkes okuyabilir, sadece adminler yazabilir
+    match /shorts/videos/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Kullanıcı avatarları - kullanıcılar kendi avatarlarını yazabilir
+    match /users/avatars/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // AI oluşturulan içerik - herkes okuyabilir, sadece sistem yazabilir
+    match /ai/generated/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Oyun varlıkları - herkes okuyabilir, sadece adminler yazabilir
+    match /games/assets/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+}
+
+
