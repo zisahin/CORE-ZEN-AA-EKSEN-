@@ -1,9 +1,11 @@
-'use client'
-import { useState, useEffect } from 'react'
-import NewsDetail from './NewsDetail'
-import aiService from '@/services/aiService'
+'use client';
 
-// Kategori mapping: Türkçe -> İngilizce (API için)
+import { useState, useEffect } from 'react';
+import { newsService } from '@/services/newsService';
+import { NewsItem as FirestoreNews } from '@/types/firestore';
+import NewsDetail from './NewsDetail';
+
+// Kategori mapping: Türkçe -> Firebase/API kategorileri
 const categoryMapping: { [key: string]: string } = {
   'Tümü': 'all',
   'Güncel': 'guncel',
@@ -14,21 +16,27 @@ const categoryMapping: { [key: string]: string } = {
   'Sağlık': 'saglik',
   'Eğitim': 'egitim',
   'Kültür': 'kultur',
-  'Siyaset': 'siyaset'
+  'Siyaset': 'siyaset',
+  'Ulaşım': 'ulasim'
 }
 
-const categories = ['Tümü', 'Güncel', 'Ekonomi', 'Spor', 'Teknoloji', 'Dünya', 'Sağlık']
+const categories = ['Tümü', 'Güncel', 'Ekonomi', 'Spor', 'Teknoloji', 'Dünya', 'Sağlık', 'Siyaset', 'Ulaşım']
 
 interface NewsItem {
   id: string
   title: string
   description: string
-  content: string
+  content?: string
   link: string
-  pubDate: Date
+  pubDate: string
+  publishedAt?: string
   category: string
-  categoryId: string
-  source: string
+  categoryId?: string
+  source?: string
+  imageUrl?: string
+  readTime?: number
+  summary?: string
+  likes?: number
 }
 
 export default function NewsGrid() {
@@ -39,33 +47,51 @@ export default function NewsGrid() {
   const [likedNews, setLikedNews] = useState<string[]>([])
   const [selectedNewsId, setSelectedNewsId] = useState<string | null>(null)
 
-  // Haberleri yükle
+  // Sayfa yüklendiğinde ve kategori değiştiğinde haberleri yükle
   useEffect(() => {
-    loadNews(selectedCategory)
-  }, [selectedCategory])
+    loadNews();
+  }, [selectedCategory]);
 
-  const loadNews = async (category: string) => {
-    setLoading(true)
+  // Haberleri yükle firebase ayarlandi knk yine  de bir bakarız  
+  const loadNews = async () => {
+    setLoading(true);
     try {
-      let news: any[] = []
+      let fetchedNews;
       
-      if (category === 'Tümü') {
-        // Karışık haberler
-        news = await aiService.getMixedNews(30)
+      const apiCategory = categoryMapping[selectedCategory] || 'all';
+      
+      if (apiCategory === 'all') {
+        // Firebase'den TÜM haberleri çek
+        fetchedNews = await newsService.getNews(50); // 50 haber
       } else {
-        // Kategoriye göre haberler
-        const categoryId = categoryMapping[category] || 'guncel'
-        news = await aiService.getNewsByCategory(categoryId, 20)
+        // Firebase'den kategoriye göre haberleri çek
+        fetchedNews = await newsService.getNewsByCategory(apiCategory, 50);
       }
       
-      setNewsData(news)
+      // Timestamp'i string'e çevir (RSS formatına uygun)
+      const newsWithDates = fetchedNews.map(news => ({
+        id: news.id,
+        title: news.title,
+        description: news.content.substring(0, 200) + '...',
+        link: news.newsUrl,
+        pubDate: news.publishedAt.toDate().toISOString(),
+        imageUrl: news.imageUrl || '/images/kitap.png',
+        category: news.category,
+        readTime: Math.ceil(news.content.length / 1000),
+        summary: news.content.substring(0, 150) + '...',
+        publishedAt: news.publishedAt.toDate().toISOString(),
+        likes: news.likeCount || 0
+      }));
+      
+      setNewsData(newsWithDates);
+      console.log(`✅ Firebase'den ${newsWithDates.length} haber yüklendi (Kategori: ${selectedCategory})`);
     } catch (error) {
-      console.error('Haberler yüklenirken hata:', error)
-      setNewsData([])
+      console.error('❌ Firebase haber çekme hatası:', error);
+      setNewsData([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const filteredNews = newsData
   const handleRead = (newsId: string) => {
@@ -138,11 +164,11 @@ export default function NewsGrid() {
               {/* Image */}
               <div className="relative h-48 overflow-hidden bg-gradient-to-br from-brand-blue/20 to-purple-600/20">
                 <img
-                  src={`https://picsum.photos/400/300?random=${news.id}`}
+                  src={news.imageUrl || '/images/kitap.png'}
                   alt={news.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   onError={(e) => {
-                    e.currentTarget.src = '/images/istanbul.jpg'
+                    e.currentTarget.src = '/images/kitap.png'
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
@@ -165,9 +191,9 @@ export default function NewsGrid() {
               <div className="flex items-center justify-between text-xs text-slate-500 mb-4">
                 <span className="flex items-center gap-1">
                   <img src="/images/kitap.png" alt="Okuma süresi" className="w-4 h-4" />
-                  {news.readTime} okuma
+                  {news.readTime || 5} okuma
                 </span>
-                <span>{new Date(news.publishedAt).toLocaleDateString('tr-TR')}</span>
+                <span>{new Date(news.publishedAt || news.pubDate).toLocaleDateString('tr-TR')}</span>
               </div>
               {/* Actions */}
               <div className="flex items-center justify-between pt-3 border-t border-cream-strong">
@@ -190,7 +216,7 @@ export default function NewsGrid() {
                     <span className={`text-xs font-medium ${
                       likedNews.includes(news.id) ? 'text-red-500' : 'text-slate-500'
                     }`}>
-                      {news.likes + (likedNews.includes(news.id) ? 1 : 0)}
+                      {(news.likes || 0) + (likedNews.includes(news.id) ? 1 : 0)}
                     </span>
                   </button>
                   <button className="flex items-center gap-1 text-slate-500 hover:text-brand-blue transition-colors">
