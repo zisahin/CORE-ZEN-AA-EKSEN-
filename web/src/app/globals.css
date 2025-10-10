@@ -2,12 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global styles */
+/* Global styles - Oyunlaştırılmış Gradient Tema */
 html, body {
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  background-color: #f2efe6; /* cream */
-  color: #0f172a;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+  background-attachment: fixed;
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+/* Parlak beyaz text */
+.text-white {
+  color: #ffffff !important;
+}
+
+/* Scrollbar stilini güzelleştir */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #7c3aed, #3b82f6);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #6d28d9, #2563eb);
 }
