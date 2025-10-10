@@ -1,56 +1,87 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { newsService } from '@/services/newsService'
+import { NewsItem } from '@/types/firestore'
+import NewsQuiz from './NewsQuiz'
+import aiService from '@/services/aiService'
 
 interface NewsDetailProps {
   newsId: string
   onClose: () => void
 }
 
-const mockNewsData = {
-  id: '1',
-  title: 'Yapay Zeka Teknolojileri Türkiye\'de Hızla Gelişiyor',
-  content: `Türkiye'de yapay zeka teknolojileri alanında son dönemde önemli gelişmeler yaşanıyor. Özellikle teknoloji şirketlerinin bu alandaki yatırımları %150 oranında artış gösterdi.
-
-Teknoloji Bakanı Mehmet Cahit Turhan, yaptığı açıklamada "Yapay zeka alanında Türkiye'nin bölgesel bir hub olma hedefimiz var. Bu kapsamda 2024 yılında 50 milyar TL'lik yatırım planımızı hayata geçiriyoruz" dedi.
-
-Sektör temsilcileri, bu gelişmelerin Türkiye'nin teknoloji ihracatını önemli ölçüde artıracağını belirtiyor. Özellikle finans, sağlık ve eğitim sektörlerinde yapay zeka uygulamalarının yaygınlaştırılması planlanıyor.
-
-İstanbul Teknik Üniversitesi'nden Prof. Dr. Ahmet Yılmaz, "Bu yatırımlar sayesinde gelecek 5 yıl içinde 100 bin yeni istihdam yaratılması bekleniyor" şeklinde konuştu.
-
-Ayrıca, yapay zeka araştırma merkezlerinin sayısının da hızla artması dikkat çekiyor. Şu anda Türkiye'de 25 farklı üniversitede yapay zeka bölümleri bulunuyor.`,
-  image: '/images/istanbul.jpg',
-  category: 'Teknoloji',
-  author: 'Mehmet Özkan',
-  publishedAt: new Date('2024-01-15T10:30:00Z'),
-  readTime: '4 dk',
-  likes: 6700,
-  comments: 12000,
-  views: 45000
-}
-
 export default function NewsDetail({ newsId, onClose }: NewsDetailProps) {
+  const [newsData, setNewsData] = useState<NewsItem | null>(null)
+  const [loading, setLoading] = useState(true)
   const [isLiked, setIsLiked] = useState(false)
   const [showBubbleMenu, setShowBubbleMenu] = useState(true)
   const [showSummary, setShowSummary] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [showQuiz, setShowQuiz] = useState(false)
+  const [aiSummary, setAiSummary] = useState<string>('')
+  const [summaryLoading, setSummaryLoading] = useState(false)
+
+  // Firebase'den haber detayını çek
+  useEffect(() => {
+    const loadNewsDetail = async () => {
+      setLoading(true)
+      try {
+        const news = await newsService.getNewsById(newsId)
+        if (news) {
+          setNewsData(news)
+          console.log('✅ Haber detayı yüklendi:', news.title)
+        } else {
+          console.error('❌ Haber bulunamadı:', newsId)
+        }
+      } catch (error) {
+        console.error('❌ Haber detayı yüklenirken hata:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadNewsDetail()
+  }, [newsId])
 
   const handleLike = () => {
     setIsLiked(!isLiked)
   }
 
-  const handleSummarize = () => {
+  const handleSummarize = async () => {
+    if (!newsData) return
+    
     setShowSummary(true)
     setShowBubbleMenu(false)
+    
+    // Eğer daha önce özet çektiyse tekrar çekme
+    if (aiSummary) return
+    
+    try {
+      setSummaryLoading(true)
+      const summary = await aiService.summarizeNews(
+        newsData.content,
+        newsData.title,
+        newsData.category
+      )
+      setAiSummary(summary)
+      console.log('✅ AI özeti oluşturuldu')
+    } catch (error) {
+      console.error('❌ Özet oluşturulamadı:', error)
+      setAiSummary('Özet oluşturulurken bir hata oluştu. Lütfen daha sonra tekrar deneyin.')
+    } finally {
+      setSummaryLoading(false)
+    }
   }
 
   const handlePlayAudio = () => {
+    if (!newsData) return
+    
     if (isPlaying) {
       speechSynthesis.cancel()
       setIsPlaying(false)
     } else {
-      const utterance = new SpeechSynthesisUtterance(mockNewsData.content)
+      const utterance = new SpeechSynthesisUtterance(newsData.content)
       utterance.lang = 'tr-TR'
       utterance.rate = 0.9
       utterance.onend = () => setIsPlaying(false)
@@ -64,6 +95,39 @@ export default function NewsDetail({ newsId, onClose }: NewsDetailProps) {
     setShowQuiz(true)
     setShowBubbleMenu(false)
   }
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="fixed inset-0 z-50 bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-brand-blue mx-auto mb-4"></div>
+          <p className="text-gray-600">Haber yükleniyor...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Haber bulunamadı
+  if (!newsData) {
+    return (
+      <div className="fixed inset-0 z-50 bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl text-gray-800 mb-4">❌ Haber bulunamadı</p>
+          <button
+            onClick={onClose}
+            className="bg-brand-blue text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Geri Dön
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Hesaplanan değerler
+  const readTime = Math.ceil(newsData.content.length / 1000)
+  const publishDate = newsData.publishedAt.toDate()
 
   return (
     <div className="fixed inset-0 z-50 bg-white overflow-y-auto">
@@ -79,7 +143,7 @@ export default function NewsDetail({ newsId, onClose }: NewsDetailProps) {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1 text-sm text-gray-500">
               <img src="/images/okuma.png" alt="Görüntüleme" className="w-5 h-5" />
-              <span>{mockNewsData.views.toLocaleString()} görüntüleme</span>
+              <span>{newsData.viewCount.toLocaleString()} görüntüleme</span>
             </div>
             <button className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
               <img src="/images/share.png" alt="Paylaş" className="w-5 h-5" />
@@ -91,55 +155,98 @@ export default function NewsDetail({ newsId, onClose }: NewsDetailProps) {
       {/* Content */}
       <article className="max-w-4xl mx-auto px-4 py-6">
         {/* Category & Meta */}
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center flex-wrap gap-3 mb-4">
           <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
-            {mockNewsData.category}
+            {newsData.category}
           </span>
+          {newsData.verified && (
+            <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+              ✓ Doğrulanmış
+            </span>
+          )}
+          {newsData.breaking && (
+            <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium animate-pulse">
+              🔴 Manşet
+            </span>
+          )}
           <span className="text-gray-500 text-sm">
-            {mockNewsData.publishedAt.toLocaleDateString('tr-TR')}
+            {publishDate.toLocaleDateString('tr-TR', { 
+              day: 'numeric', 
+              month: 'long', 
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
           </span>
           <div className="flex items-center gap-1 text-gray-500 text-sm">
             <img src="/images/kitap.png" alt="Okuma süresi" className="w-4 h-4" />
-            <span>{mockNewsData.readTime} okuma</span>
+            <span>{readTime} dk okuma</span>
           </div>
+          {newsData.location && (
+            <div className="flex items-center gap-1 text-gray-500 text-sm">
+              📍 {newsData.location}
+            </div>
+          )}
         </div>
 
         {/* Title */}
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
-          {mockNewsData.title}
+          {newsData.title}
         </h1>
 
         {/* Author */}
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 bg-brand-blue rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-sm">
-              {mockNewsData.author.charAt(0)}
+              {newsData.author.charAt(0)}
             </span>
           </div>
           <div>
-            <div className="font-medium text-gray-900">{mockNewsData.author}</div>
-            <div className="text-sm text-gray-500">Anadolu Ajansı Muhabiri</div>
+            <div className="font-medium text-gray-900">{newsData.author}</div>
+            <div className="text-sm text-gray-500">Anadolu Ajansı</div>
           </div>
         </div>
 
         {/* Main Image */}
-        <div className="relative mb-8">
-          <img
-            src={mockNewsData.image}
-            alt={mockNewsData.title}
-            className="w-full h-64 md:h-96 object-cover rounded-2xl"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
-        </div>
+        {newsData.imageUrl && (
+          <div className="relative mb-8">
+            <img
+              src={newsData.imageUrl}
+              alt={newsData.title}
+              className="w-full h-64 md:h-96 object-cover rounded-2xl"
+            />
+            {newsData.imageCaption && (
+              <p className="text-sm text-gray-600 mt-2 italic text-center">
+                {newsData.imageCaption}
+              </p>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+          </div>
+        )}
 
         {/* Content */}
         <div className="prose prose-lg max-w-none mb-8">
-          {mockNewsData.content.split('\n\n').map((paragraph, index) => (
+          {newsData.content.split('\n\n').map((paragraph, index) => (
             <p key={index} className="mb-4 text-gray-700 leading-relaxed">
               {paragraph}
             </p>
           ))}
         </div>
+
+        {/* News URL Link */}
+        {newsData.newsUrl && (
+          <div className="mb-8 p-4 bg-blue-50 rounded-xl border border-blue-200">
+            <p className="text-sm text-gray-600 mb-2">📰 Orijinal Haber:</p>
+            <a 
+              href={newsData.newsUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-brand-blue hover:underline text-sm break-all"
+            >
+              {newsData.newsUrl}
+            </a>
+          </div>
+        )}
 
         {/* Stats */}
         <div className="flex items-center justify-between py-4 border-t border-gray-200 mb-20">
@@ -155,10 +262,21 @@ export default function NewsDetail({ newsId, onClose }: NewsDetailProps) {
               >
                 <img src={isLiked ? "/images/like-filled.png" : "/images/like-empty.png"} alt="Like" className="w-5 h-5" />
                 <span className="font-medium">
-                  {(mockNewsData.likes + (isLiked ? 1 : 0)).toLocaleString()}
+                  {(newsData.likeCount + (isLiked ? 1 : 0)).toLocaleString()}
                 </span>
               </button>
             </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <span className="text-sm">👁️ {newsData.viewCount.toLocaleString()} görüntülenme</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <span className="text-sm">💫 +{newsData.xpPoints} XP</span>
+            </div>
+            {newsData.shareCount > 0 && (
+              <div className="flex items-center gap-2 text-gray-600">
+                <span className="text-sm">🔗 {newsData.shareCount} paylaşım</span>
+              </div>
+            )}
           </div>
         </div>
       </article>
@@ -226,7 +344,7 @@ export default function NewsDetail({ newsId, onClose }: NewsDetailProps) {
       
 
       {/* AI Summary Modal */}
-      {showSummary && (
+      {showSummary && newsData && (
         <div className="fixed inset-0 z-60 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
@@ -242,92 +360,59 @@ export default function NewsDetail({ newsId, onClose }: NewsDetailProps) {
               </button>
             </div>
             
-            <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-xl mb-4">
-              <h4 className="font-semibold text-gray-800 mb-2">📝 Özet:</h4>
-              <p className="text-gray-700 leading-relaxed mb-3">
-                Türkiye'de yapay zeka teknolojileri alanında büyük gelişmeler yaşanıyor. Şirketlerin yatırımları %150 artarken, Teknoloji Bakanlığı 50 milyar TL'lik yatırım planı açıkladı. Bu gelişmelerin 100 bin yeni istihdam yaratması ve Türkiye'nin teknoloji ihracatını artırması bekleniyor.
-              </p>
-              
-              <h4 className="font-semibold text-gray-800 mb-2">🔑 Anahtar Noktalar:</h4>
-              <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm">
-                <li>Yapay zeka yatırımları %150 arttı</li>
-                <li>50 milyar TL'lik yatırım planı</li>
-                <li>100 bin yeni istihdam hedefi</li>
-                <li>25 üniversitede yapay zeka bölümü</li>
-              </ul>
-            </div>
-            
-            <div className="flex gap-3">
-              <button 
-                onClick={() => setShowSummary(false)}
-                className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition-colors"
-              >
-                Tamam
-              </button>
-              <button 
-                onClick={() => {
-                  const summary = "Türkiye'de yapay zeka teknolojileri alanında büyük gelişmeler yaşanıyor..."
-                  navigator.share?.({
-                    title: 'Haber Özeti',
-                    text: summary
-                  })
-                }}
-                className="flex-1 bg-brand-blue text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition-colors"
-              >
-                📤 Paylaş
-              </button>
-            </div>
+            {summaryLoading ? (
+              <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-8 rounded-xl text-center">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mb-4"></div>
+                <p className="text-gray-700">AI özet oluşturuyor...</p>
+              </div>
+            ) : (
+              <>
+                <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-xl mb-4">
+                  <h4 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                    <span>📝</span>
+                    <span>Özet:</span>
+                  </h4>
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                    {aiSummary || 'Özet oluşturulurken bir hata oluştu.'}
+                  </p>
+                </div>
+                
+                <div className="flex gap-3">
+                  <button 
+                    onClick={() => setShowSummary(false)}
+                    className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition-colors"
+                  >
+                    Tamam
+                  </button>
+                  <button 
+                    onClick={() => {
+                      navigator.share?.({
+                        title: newsData.title,
+                        text: `${newsData.title}\n\n${aiSummary}\n\n${newsData.newsUrl}`
+                      })
+                    }}
+                    className="flex-1 bg-brand-blue text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition-colors"
+                  >
+                    📤 Paylaş
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
 
       {/* Quiz Modal */}
-      {showQuiz && (
+      {showQuiz && newsData && (
         <div className="fixed inset-0 z-60 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-2xl w-full">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">🧠</span>
-                <h3 className="text-xl font-bold text-gray-800">Haber Quiz'i</h3>
-              </div>
-              <button
-                onClick={() => setShowQuiz(false)}
-                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center"
-              >
-                ✕
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl">
-                <h4 className="font-semibold text-gray-800 mb-3">
-                  Türkiye'de yapay zeka yatırımları ne kadar artış gösterdi?
-                </h4>
-                
-                <div className="space-y-2">
-                  {['%100', '%125', '%150', '%200'].map((option, index) => (
-                    <button
-                      key={index}
-                      className="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-brand-blue hover:bg-brand-blue/5 transition-colors"
-                    >
-                      {String.fromCharCode(65 + index)}) {option}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="flex gap-3">
-                <button 
-                  onClick={() => setShowQuiz(false)}
-                  className="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-medium hover:bg-gray-200 transition-colors"
-                >
-                  İptal
-                </button>
-                <button className="flex-1 bg-green-500 text-white py-3 rounded-xl font-medium hover:bg-green-600 transition-colors">
-                  Cevabı Gönder
-                </button>
-              </div>
-            </div>
+          <div className="relative max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setShowQuiz(false)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white shadow-lg hover:bg-gray-100 flex items-center justify-center transition-colors"
+            >
+              ✕
+            </button>
+            <NewsQuiz newsId={newsData.id} category={newsData.category} />
           </div>
         </div>
       )}

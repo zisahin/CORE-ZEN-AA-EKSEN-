@@ -62,3 +62,26 @@ export interface CrosswordWordGroup {
     xp: number;
   }[];
 }
+
+export interface AIQuestion {
+  id: string;
+  text: string;
+  category: string;
+  options: string[];
+  correctAnswer?: number;
+  xpPoints: number;
+  date: Timestamp;
+  active: boolean;
+  createdAt: Timestamp;
+}
+
+export interface DailyTask {
+  id: string;
+  title: string;
+  description: string;
+  xpReward: number;
+  type: string;
+  requirement: number;
+  active: boolean;
+  createdAt: Timestamp;
+}

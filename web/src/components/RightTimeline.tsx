@@ -1,46 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AIDailyQuestions from './AIDailyQuestions'
+import AIChat from './AIChat'
+import { newsService } from '@/services/newsService'
 
-const timelineNews = [
-  {
-    id: 1,
-    title: "Borsa İstanbul'da Rekor Artış",
-    time: "2 dk önce",
-    category: "Ekonomi",
-    urgent: true,
-    xp: 15
-  },
-  {
-    id: 2,
-    title: "Milli Takım Kadrosu Açıklandı",
-    time: "15 dk önce", 
-    category: "Spor",
-    xp: 12
-  },
-  {
-    id: 3,
-    title: "Yeni Teknoloji Merkezi Açılıyor",
-    time: "32 dk önce",
-    category: "Teknoloji", 
-    xp: 18
-  },
-  {
-    id: 4,
-    title: "İklim Zirvesi Sonuçları",
-    time: "1 saat önce",
-    category: "Dünya",
-    xp: 20
-  },
-  {
-    id: 5,
-    title: "Eğitimde Dijital Dönüşüm",
-    time: "2 saat önce",
-    category: "Eğitim",
-    xp: 16
-  }
-]
+interface LiveNewsItem {
+  id: string
+  title: string
+  time: string
+  category: string
+  urgent: boolean
+  xp: number
+}
 
 const aiSuggestions = [
   "Size özel ekonomi analizi hazırladık",
@@ -48,10 +20,61 @@ const aiSuggestions = [
 ]
 
 export default function RightTimeline() {
-  const [readItems, setReadItems] = useState<number[]>([])
+  const [readItems, setReadItems] = useState<string[]>([])
   const [currentSuggestion, setCurrentSuggestion] = useState(0)
+  const [isAIChatOpen, setIsAIChatOpen] = useState(false)
+  const [liveNews, setLiveNews] = useState<LiveNewsItem[]>([])
 
-  const handleRead = (id: number, xp: number) => {
+  // Son 3 saatteki haberleri yükle
+  useEffect(() => {
+    const loadLiveNews = async () => {
+      try {
+        const allNews = await newsService.getNews(100)
+        const now = new Date()
+        const threeHoursAgo = new Date(now.getTime() - 3 * 60 * 60 * 1000)
+
+        const recentNews = allNews
+          .filter(news => {
+            const newsDate = news.publishedAt.toDate()
+            return newsDate >= threeHoursAgo && newsDate <= now
+          })
+          .sort((a, b) => b.publishedAt.toDate().getTime() - a.publishedAt.toDate().getTime())
+          .slice(0, 10)
+          .map(news => {
+            const newsDate = news.publishedAt.toDate()
+            const diffMs = now.getTime() - newsDate.getTime()
+            const diffMins = Math.floor(diffMs / 60000)
+            const diffHours = Math.floor(diffMins / 60)
+            
+            let timeText = ''
+            if (diffMins < 1) timeText = 'Az önce'
+            else if (diffMins < 60) timeText = `${diffMins} dk önce`
+            else timeText = `${diffHours} saat önce`
+
+            return {
+              id: news.id,
+              title: news.title,
+              time: timeText,
+              category: news.category,
+              urgent: news.breaking || false,
+              xp: news.xpPoints
+            }
+          })
+
+        setLiveNews(recentNews)
+        console.log(`✅ ${recentNews.length} canlı haber yüklendi`)
+      } catch (error) {
+        console.error('❌ Canlı haberler yüklenemedi:', error)
+      }
+    }
+
+    loadLiveNews()
+    // Her 2 dakikada bir güncelle
+    const interval = setInterval(loadLiveNews, 2 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const handleRead = (id: string, xp: number) => {
     if (!readItems.includes(id)) {
       setReadItems([...readItems, id])
       // XP animation trigger here
@@ -61,17 +84,23 @@ export default function RightTimeline() {
   return (
     <aside className="w-80 bg-white/60 backdrop-blur border-l border-cream-strong h-screen sticky top-0 overflow-y-auto">
       {/* AI Assistant */}
-      <div className="p-4 bg-gradient-to-br from-brand-blue/10 to-purple-50 border-b border-cream-strong">
+      <div 
+        className="p-4 bg-gradient-to-br from-brand-blue/10 to-purple-50 border-b border-cream-strong cursor-pointer hover:from-brand-blue/20 hover:to-purple-100 transition-all"
+        onClick={() => setIsAIChatOpen(true)}
+      >
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-8 h-8 rounded-full overflow-hidden">
+          <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-brand-blue/30">
             <img src="/images/ai-assistant.png" alt="AI" className="w-full h-full object-cover" />
           </div>
           <div>
             <h3 className="font-bold text-brand-blue text-sm">AA AI Asistan</h3>
             <p className="text-xs text-slate-500">Kişisel Haber Analisti</p>
           </div>
+          <div className="ml-auto">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          </div>
         </div>
-        <div className="bg-white/80 backdrop-blur rounded-xl p-3 border border-white/50 shadow-lg">
+        <div className="bg-white/80 backdrop-blur rounded-xl p-3 border border-white/50 shadow-lg hover:shadow-xl transition-shadow">
           <p className="text-sm text-slate-700 mb-2">
             {aiSuggestions[currentSuggestion]}
           </p>
@@ -112,8 +141,13 @@ export default function RightTimeline() {
 
       {/* Timeline Items */}
       <div className="p-3">
-        <div className="space-y-3">
-          {timelineNews.map((item) => (
+        {liveNews.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            <p className="text-sm">Son 3 saatte haber yok</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {liveNews.map((item) => (
             <div
               key={item.id}
               className={`group relative p-3 rounded-xl border transition-all duration-200 hover:shadow-lg cursor-pointer ${
@@ -157,7 +191,8 @@ export default function RightTimeline() {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* AI Daily Questions */}
@@ -184,6 +219,14 @@ export default function RightTimeline() {
           </div>
         </div>
       </div>
+
+      {/* AI Chat Modal */}
+      {isAIChatOpen && (
+        <AIChat 
+          isOpen={isAIChatOpen}
+          onClose={() => setIsAIChatOpen(false)} 
+        />
+      )}
     </aside>
   )
 }
