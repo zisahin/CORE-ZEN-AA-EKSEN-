@@ -512,18 +512,22 @@ private fun VideoPlayerScreen(
                         RoundedCornerShape(20.dp)
                     )
                     .padding(horizontal = 12.dp, vertical = 6.dp)
-                    .clickable {
-                        // Open in YouTube app with proper intent
-                        try {
-                            val youtubeIntent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(video.videoUrl))
-                            youtubeIntent.setPackage("com.google.android.youtube")
-                            context.startActivity(youtubeIntent)
-                        } catch (e: Exception) {
-                            // Fallback to browser
-                            val browserIntent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(video.videoUrl))
-                            context.startActivity(browserIntent)
-                        }
-                    },
+                    .clickable(
+                        onClick = {
+                            // Open in YouTube app with proper intent
+                            try {
+                                val youtubeIntent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(video.videoUrl))
+                                youtubeIntent.setPackage("com.google.android.youtube")
+                                context.startActivity(youtubeIntent)
+                            } catch (e: Exception) {
+                                // Fallback to browser
+                                val browserIntent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(video.videoUrl))
+                                context.startActivity(browserIntent)
+                            }
+                        },
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(

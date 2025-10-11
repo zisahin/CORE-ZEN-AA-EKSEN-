@@ -358,5 +358,3 @@ async function sendNotificationToAdmins(notification) {
     }
 }
 
-
-

@@ -220,5 +220,3 @@ Firebase altyapısı ile ilgili sorularınız için:
 - Gelişmiş AI özellikleri
 - Sosyal medya entegrasyonu
 - Offline destek
-
-

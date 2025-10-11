@@ -46,9 +46,9 @@ class LocalNewsDataSource @Inject constructor() {
             NewsCategory("1", "Gündem", "article", "#2196F3"),
             NewsCategory("2", "Siyaset", "account_balance", "#9C27B0"),
             NewsCategory("3", "Spor", "sports", "#4CAF50"),
-            NewsCategory("4", "Cinayet", "gavel", "#E53935"),
-            NewsCategory("5", "Ekonomi", "trending_up", "#FF9800"),
-            NewsCategory("6", "Teknoloji", "computer", "#607D8B")
+            NewsCategory("4", "Ekonomi", "trending_up", "#FF9800"),
+            NewsCategory("5", "Teknoloji", "computer", "#607D8B"),
+            NewsCategory("6", "Sağlık", "local_hospital", "#4CAF50")
         )
     }
     

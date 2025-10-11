@@ -33,20 +33,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         
-        // Firebase örnek verilerini yükle (tek seferlik)
-        lifecycleScope.launch {
-            try {
-                sampleDataInitializer.initializeSampleData(this@MainActivity)
-                    .onSuccess {
-                        Log.d("MainActivity", "✅ Firebase verileri hazır!")
-                    }
-                    .onFailure { error ->
-                        Log.e("MainActivity", "❌ Firebase verileri yüklenemedi: ${error.message}")
-                    }
-            } catch (e: Exception) {
-                Log.e("MainActivity", "❌ Beklenmeyen hata: ${e.message}")
-            }
-        }
+        // Firebase örnek verileri - sadece gerektiğinde manuel yükleme
+        // Otomatik yükleme iptal edildi
+        Log.d("MainActivity", "📱 Uygulama başlatıldı - Sample veri otomatik yükleme kapalı")
         
         setContent {
             AAEksenTheme {

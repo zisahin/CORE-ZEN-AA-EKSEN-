@@ -18,14 +18,25 @@ object FirebaseConfig {
         const val USER_GAME_STATS = "user_game_stats"
         
         // Kullanıcı Sistemi
+        const val USER_PROFILES = "user_profiles"
         const val DAILY_TASKS = "daily_tasks"
         const val USER_TASK_PROGRESS = "user_task_progress"
         const val BADGES = "badges"
+        const val USER_BADGES = "user_badges"
+        const val USER_STATS = "user_stats"
+        const val XP_HISTORY = "xp_history"
         
         // AI Sistemi
         const val AI_CHATS = "ai_chats"
         const val AI_QUESTIONS = "ai_questions"
         const val USER_QUESTION_RESPONSES = "user_question_responses"
+        
+        // Video Sistemi
+        const val VIDEOS = "videos"
+        const val VIDEO_GENERATION_REQUESTS = "video_generation_requests"
+        const val VIDEO_PLAYLISTS = "video_playlists"
+        const val VIDEO_COMMENTS = "video_comments"
+        const val VIDEO_STATS = "video_stats"
     }
     
     // Analytics Events
