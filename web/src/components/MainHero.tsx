@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTheme } from '@/context/ThemeContext'
 
 const heroNews = [
   {
@@ -26,6 +27,7 @@ const heroNews = [
 export default function MainHero() {
   const [currentNews, setCurrentNews] = useState(0)
   const [isReading, setIsReading] = useState(false)
+  const { isGradient } = useTheme()
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -45,7 +47,11 @@ export default function MainHero() {
   return (
     <section className="relative">
       {/* Main Hero */}
-      <div className="relative h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-brand-blue via-blue-800 to-blue-900 shadow-2xl">
+      <div className={`relative h-96 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
+        isGradient
+          ? 'bg-gradient-to-br from-purple-900 via-blue-900 to-purple-900'
+          : 'bg-gradient-to-br from-brand-blue via-blue-800 to-blue-900'
+      }`}>
         <div 
           className="absolute inset-0 bg-cover bg-center opacity-20"
           style={{ backgroundImage: `url("${currentItem.image}")` }}

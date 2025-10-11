@@ -191,6 +191,47 @@ class AIService {
   }
 
   /**
+   * Haber için quiz oluştur
+   * @param newsContent Haber içeriği
+   * @param newsTitle Haber başlığı
+   * @param category Haber kategorisi
+   * @returns Quiz soruları
+   */
+  async generateQuiz(
+    newsContent: string,
+    newsTitle: string,
+    category: string
+  ): Promise<any> {
+    try {
+      const response = await fetch(`${this.baseURL}/api/quiz/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          newsItems: [{
+            title: newsTitle,
+            content: newsContent,
+            category: category
+          }],
+          difficulty: 'mixed',
+          questionCount: 4
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.quiz;
+    } catch (error) {
+      console.error('❌ Quiz Generation Error:', error);
+      throw new Error('Quiz oluşturulamadı. Lütfen daha sonra tekrar deneyin.');
+    }
+  }
+
+  /**
    * Servis sağlık kontrolü
    * @returns Servis durumu
    */

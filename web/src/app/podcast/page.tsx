@@ -60,33 +60,40 @@ export default function PodcastPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <TopNav />
-      
-      <div className="flex">
-        <LeftSidebar currentPath={pathname} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 relative overflow-hidden">
+      {/* Dekoratif Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-20 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '700ms' }}></div>
+      </div>
+
+      <div className="relative z-10">
+        <TopNav />
         
-        {/* Ana İçerik - Podcast Player */}
-        <main className="flex-1 min-h-screen p-8">
+        <div className="flex">
+          <LeftSidebar currentPath={pathname} />
+          
+          {/* Ana İçerik - Podcast Player */}
+          <main className="flex-1 min-h-screen p-8">
           <div className="max-w-4xl mx-auto">
             {/* Sayfa Başlığı */}
             <div className="mb-8">
-              <h1 className="text-4xl font-bold text-gray-800 mb-3">
+              <h1 className="text-4xl font-bold text-white mb-3">
                 🎙️ AA Eksen Podcast
               </h1>
-              <p className="text-gray-600 text-lg">
+              <p className="text-white/80 text-lg">
                 Güncel haberler, analizler ve özel içerikler podcast formatında
               </p>
             </div>
 
             {/* Podcast Player */}
             {selectedPodcast && (
-              <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+              <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-8 border border-white/10">
                 {isLoadingAudio ? (
                   <div className="flex flex-col items-center justify-center py-20">
-                    <div className="animate-spin w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mb-6"></div>
-                    <p className="text-gray-600 text-lg font-medium">Podcast yükleniyor...</p>
-                    <p className="text-gray-400 text-sm mt-2">OpenAI TTS ile ses oluşturuluyor</p>
+                    <div className="animate-spin w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full mb-6"></div>
+                    <p className="text-white text-lg font-medium">Podcast yükleniyor...</p>
+                    <p className="text-white/60 text-sm mt-2">OpenAI TTS ile ses oluşturuluyor</p>
                   </div>
                 ) : audioUrl ? (
                   <PodcastPlayer
@@ -99,26 +106,26 @@ export default function PodcastPage() {
                 ) : (
                   <div className="text-center py-20">
                     <div className="text-6xl mb-4">🎧</div>
-                    <p className="text-gray-600 text-lg">Podcast yükleniyor...</p>
+                    <p className="text-white text-lg">Podcast yükleniyor...</p>
                   </div>
                 )}
 
                 {/* Podcast Bilgileri */}
-                <div className="mt-8 pt-8 border-t border-gray-100">
+                <div className="mt-8 pt-8 border-t border-white/10">
                   <div className="flex items-start gap-6">
                     <div className="flex-shrink-0">
-                      <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl shadow-lg">
+                      <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-3xl shadow-lg">
                         🎙️
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-gray-800 mb-2">
+                      <h3 className="text-xl font-bold text-white mb-2">
                         {selectedPodcast.title}
                       </h3>
-                      <p className="text-gray-600 mb-4">
+                      <p className="text-white/80 mb-4">
                         {selectedPodcast.description}
                       </p>
-                      <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                      <div className="flex flex-wrap gap-4 text-sm text-white/60">
                         <span className="flex items-center gap-2">
                           <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
                           {selectedPodcast.category}
@@ -140,11 +147,12 @@ export default function PodcastPage() {
           </div>
         </main>
 
-        {/* Sağ Sidebar - Podcast Kütüphanesi */}
-        <PodcastSidebar 
-          selectedPodcastId={selectedPodcast?.id}
-          onPodcastSelect={handlePodcastSelect}
-        />
+          {/* Sağ Sidebar - Podcast Kütüphanesi */}
+          <PodcastSidebar 
+            selectedPodcastId={selectedPodcast?.id}
+            onPodcastSelect={handlePodcastSelect}
+          />
+        </div>
       </div>
     </div>
   )

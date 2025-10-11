@@ -1,21 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import aiService from '@/services/aiService'
-
-interface DailyQuestion {
-  id: string
-  text: string
-  category: string
-  options: string[]
-}
+import { aiQuestionService } from '@/services/aiQuestionService'
+import { AIQuestion } from '@/types/firestore'
+import { Timestamp } from 'firebase/firestore'
 
 interface AIDailyQuestionsProps {
   maxShow?: number // Ana sayfada 1, detay sayfasında 1
 }
 
 export default function AIDailyQuestions({ maxShow = 1 }: AIDailyQuestionsProps) {
-  const [questions, setQuestions] = useState<DailyQuestion[]>([])
+  const [questions, setQuestions] = useState<AIQuestion[]>([])
   const [answeredQuestions, setAnsweredQuestions] = useState<string[]>([])
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(true)
@@ -34,12 +29,9 @@ export default function AIDailyQuestions({ maxShow = 1 }: AIDailyQuestionsProps)
   const loadDailyQuestions = async () => {
     try {
       setLoading(true)
-      const response = await fetch('http://localhost:3001/api/questions/daily')
-      const data = await response.json()
-      
-      if (data.success && data.questions) {
-        setQuestions(data.questions)
-      }
+      const data = await aiQuestionService.getTodayQuestions()
+      setQuestions(data)
+      console.log(`✅ ${data.length} AI sorusu Firebase'den yüklendi`)
     } catch (error) {
       console.error('❌ Günlük sorular yüklenemedi:', error)
     } finally {
@@ -100,6 +92,9 @@ export default function AIDailyQuestions({ maxShow = 1 }: AIDailyQuestionsProps)
 
   // Tüm sorular bittiğinde tamamlandı kartı göster
   if (allAnswered) {
+    // Toplam XP hesapla
+    const totalXP = questions.reduce((sum, q) => sum + (q.xpPoints || 10), 0)
+    
     return (
       <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg p-6 text-white text-center animate-in">
         <div className="mb-4">
@@ -112,7 +107,7 @@ export default function AIDailyQuestions({ maxShow = 1 }: AIDailyQuestionsProps)
           </p>
           <div className="bg-white/20 backdrop-blur rounded-xl p-4 mb-4">
             <p className="text-lg font-bold mb-2">
-              3/3 Soru Tamamlandı! ✨
+              {questions.length}/{questions.length} Soru Tamamlandı! ✨
             </p>
             <p className="text-sm text-white/90">
               Yarın yeni sorular için tekrar bekleriz
@@ -120,7 +115,7 @@ export default function AIDailyQuestions({ maxShow = 1 }: AIDailyQuestionsProps)
           </div>
           <div className="bg-white/10 backdrop-blur rounded-xl px-4 py-3 inline-flex items-center justify-center gap-2">
             <span className="text-2xl">⭐</span>
-            <span className="font-bold text-lg">+30 XP Kazandın!</span>
+            <span className="font-bold text-lg">+{totalXP} XP Kazandın!</span>
           </div>
         </div>
       </div>
@@ -234,11 +229,11 @@ export default function AIDailyQuestions({ maxShow = 1 }: AIDailyQuestionsProps)
               <div className="flex items-center justify-between text-xs text-gray-500">
                 <span className="flex items-center gap-1">
                   <span>👥</span>
-                  <span>1,234 kişi cevapladı</span>
+                  <span>{Math.floor(Math.random() * 1000) + 500} kişi cevapladı</span>
                 </span>
                 <span className="flex items-center gap-1">
                   <span>⭐</span>
-                  <span>+10 XP kazandın!</span>
+                  <span>+{question.xpPoints || 10} XP kazandın!</span>
                 </span>
               </div>
             </div>

@@ -1,5 +1,7 @@
-import { City, NewsCategory } from '@/types/city'
-import { getColorForIntensity } from '@/utils/intensityCalculator'
+import { newsService } from '@/services/newsService';
+import { useEffect, useState } from 'react';
+import { City, NewsCategory } from '@/types/city';
+import { getColorForIntensity } from '@/utils/intensityCalculator';
 
 interface CityModalProps {
   city: City
@@ -8,6 +10,31 @@ interface CityModalProps {
 }
 
 export default function CityModal({ city, categories, onClose }: CityModalProps) {
+  // Firebase'den gerçek haberleri çek
+  const [realNews, setRealNews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (city) {
+      loadCityNews();
+    }
+  }, [city]);
+
+  const loadCityNews = async () => {
+    if (!city) return;
+    
+    setLoading(true);
+    try {
+      const news = await newsService.getNewsByCity(city.name, 100);
+      setRealNews(news);
+      console.log(`✅ ${city.name} için ${news.length} haber yüklendi`);
+    } catch (error) {
+      console.error(`❌ ${city.name} haberleri yüklenemedi:`, error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Şehrin kategorilerini güncelle ve sırala (en çok haberi olan üstte)
   const cityCategories = categories.map(cat => ({
     ...cat,
