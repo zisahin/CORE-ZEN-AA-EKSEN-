@@ -13,7 +13,12 @@
 .externalNativeBuild
 .cxx
 local.properties
-
+firebase-credentials.json
+venv
+/venv
+/mobile/video_backend/venv
+.venv
+venv/
 # Firebase Configuration
 google-services.json
 GoogleService-Info.plist
