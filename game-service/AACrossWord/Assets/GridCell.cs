@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Globalization;
 
 public class GridCell : MonoBehaviour
 {
@@ -78,7 +79,7 @@ public class GridCell : MonoBehaviour
         
         if (textComponent != null)
         {
-            string displayText = hasLetter ? letter.ToString().ToUpper() : "";
+            string displayText = hasLetter ? letter.ToString().ToUpper(new CultureInfo("tr-TR")) : "";
             
             if (animate)
             {

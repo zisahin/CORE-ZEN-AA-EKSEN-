@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Globalization;
 
 public class TouchInputManager : MonoBehaviour
 {
@@ -114,7 +115,7 @@ public class TouchInputManager : MonoBehaviour
     {
         if (selectedCell == null) return;
         
-        // Harf tuşlarını kontrol et
+        // Harf tuşlarını kontrol et (A-Z)
         for (int i = 0; i < keyboardKeys.Length; i++)
         {
             if (Input.GetKeyDown(keyboardKeys[i]))
@@ -122,6 +123,22 @@ public class TouchInputManager : MonoBehaviour
                 char letter = (char)('A' + i);
                 EnterLetter(selectedCell.gridX, selectedCell.gridY, letter);
                 break;
+            }
+        }
+        
+        // Türkçe karakterler için özel kontrol
+        if (Input.anyKeyDown)
+        {
+            string input = Input.inputString;
+            if (!string.IsNullOrEmpty(input))
+            {
+                char inputChar = char.ToUpper(input[0], new CultureInfo("tr-TR"));
+                // Türkçe karakterleri kontrol et
+                if (inputChar == 'İ' || inputChar == 'Ğ' || inputChar == 'Ü' || 
+                    inputChar == 'Ş' || inputChar == 'Ö' || inputChar == 'Ç')
+                {
+                    EnterLetter(selectedCell.gridX, selectedCell.gridY, inputChar);
+                }
             }
         }
         
@@ -162,6 +179,8 @@ public class TouchInputManager : MonoBehaviour
     
     private TouchScreenKeyboard mobileKeyboard;
     
+    private string lastKeyboardText = "";
+    
     void HandleMobileKeyboard()
     {
         // Telefon klavyesi kontrolü - sadece gerçek mobil cihazlarda
@@ -170,14 +189,37 @@ public class TouchInputManager : MonoBehaviour
         {
             try
             {
-                if (mobileKeyboard != null && mobileKeyboard.active && !string.IsNullOrEmpty(mobileKeyboard.text))
+                if (mobileKeyboard != null && mobileKeyboard.active)
                 {
-                    char letter = mobileKeyboard.text.ToUpper()[0];
-                    if (selectedCell != null)
+                    string currentText = mobileKeyboard.text;
+                    
+                    // Backspace algılama - text kısaldıysa backspace basılmış demektir
+                    if (currentText.Length < lastKeyboardText.Length && selectedCell != null)
                     {
+                        // Backspace işlemi
+                        int currentRow = selectedCell.gridY;
+                        EnterLetter(selectedCell.gridX, selectedCell.gridY, ' ');
+                        
+                        // Eğer bu satır önceden tamamlanmışsa ve şimdi incomplete olduysa, neutral renk yap
+                        if (!IsRowCompleted(currentRow))
+                        {
+                            ResetRowToNeutral(currentRow);
+                        }
+                        
+                        // Backspace ile bir önceki hücreye git
+                        MoveToPreviousCell(selectedCell.gridX, selectedCell.gridY);
+                        
+                        Debug.Log($"Mobile Backspace: Hücre silindi");
+                    }
+                    // Yeni harf girişi
+                    else if (!string.IsNullOrEmpty(currentText) && currentText.Length > lastKeyboardText.Length && selectedCell != null)
+                    {
+                        char letter = currentText.ToUpper(new CultureInfo("tr-TR"))[currentText.Length - 1];
                         EnterLetter(selectedCell.gridX, selectedCell.gridY, letter);
                     }
-                    mobileKeyboard.text = "";
+                    
+                    lastKeyboardText = currentText;
+                    mobileKeyboard.text = currentText; // Text'i koru
                 }
             }
             catch (System.Exception e)
@@ -198,6 +240,7 @@ public class TouchInputManager : MonoBehaviour
                 if (mobileKeyboard == null || !mobileKeyboard.active)
                 {
                     mobileKeyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, false, false);
+                    lastKeyboardText = ""; // Yeni klavye açıldığında text'i sıfırla
                 }
             }
             catch (System.Exception e)
@@ -267,7 +310,7 @@ public class TouchInputManager : MonoBehaviour
         TextMeshProUGUI textComponent = cell.GetComponentInChildren<TextMeshProUGUI>();
         if (textComponent != null)
         {
-            textComponent.text = letter == ' ' ? "" : letter.ToString().ToUpper();
+            textComponent.text = letter == ' ' ? "" : letter.ToString().ToUpper(new CultureInfo("tr-TR"));
         }
 
         OnLetterEntered?.Invoke(x, y, letter);

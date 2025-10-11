@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Globalization;
 
 [System.Serializable]
 public class CrosswordWord
@@ -12,7 +13,7 @@ public class CrosswordWord
     
     public CrosswordWord(string word, string clue, int startX, int startY, bool isHorizontal, int number)
     {
-        this.word = word.ToUpper();
+        this.word = word.ToUpper(new CultureInfo("tr-TR"));
         this.clue = clue;
         this.startX = startX;
         this.startY = startY;
@@ -65,15 +66,15 @@ public class CrosswordPuzzle : MonoBehaviour
         // Türkçe kelimeler - Her satırda TAM 7 harfli kelimeler
         // Sadece YATAY kelimeler - 10 satır boyunca
         
-        words.Add(new CrosswordWord("KITAPCI", "Kitap satan kişi", 0, 0, true, 1));          // 1. satır - 7 harf
+        words.Add(new CrosswordWord("KİTAPÇI", "Kitap satan kişi", 0, 0, true, 1));          // 1. satır - 7 harf
         words.Add(new CrosswordWord("MASALAR", "Çok sayıda masa", 0, 1, true, 2));           // 2. satır - 7 harf
-        words.Add(new CrosswordWord("KEDILER", "Miyavlayan hayvanlar", 0, 2, true, 3));      // 3. satır - 7 harf
+        words.Add(new CrosswordWord("KEDİLER", "Miyavlayan hayvanlar", 0, 2, true, 3));      // 3. satır - 7 harf
         words.Add(new CrosswordWord("ARABASI", "Onun aracı", 0, 3, true, 4));                // 4. satır - 7 harf
-        words.Add(new CrosswordWord("KALEMIM", "Benim yazı aletim", 0, 4, true, 5));         // 5. satır - 7 harf
-        words.Add(new CrosswordWord("DENIZCI", "Denizde çalışan", 0, 5, true, 6));           // 6. satır - 7 harf
-        words.Add(new CrosswordWord("GUNESLI", "Işık veren gün", 0, 6, true, 7));            // 7. satır - 7 harf
-        words.Add(new CrosswordWord("AGACLAR", "Yapraklı bitkiler", 0, 7, true, 8));         // 8. satır - 7 harf
-        words.Add(new CrosswordWord("EVIMDEN", "Yaşadığım yerden", 0, 8, true, 9));          // 9. satır - 7 harf
+        words.Add(new CrosswordWord("KALEMİM", "Benim yazı aletim", 0, 4, true, 5));         // 5. satır - 7 harf
+        words.Add(new CrosswordWord("DENİZCİ", "Denizde çalışan", 0, 5, true, 6));           // 6. satır - 7 harf
+        words.Add(new CrosswordWord("GÜNEŞLİ", "Işık veren gün", 0, 6, true, 7));            // 7. satır - 7 harf
+        words.Add(new CrosswordWord("AĞAÇLAR", "Yapraklı bitkiler", 0, 7, true, 8));         // 8. satır - 7 harf
+        words.Add(new CrosswordWord("EVİMDEN", "Yaşadığım yerden", 0, 8, true, 9));          // 9. satır - 7 harf
         words.Add(new CrosswordWord("DOSTLUK", "Arkadaşlık bağı", 0, 9, true, 10));          // 10. satır - 7 harf
     }
     
@@ -177,6 +178,6 @@ public class CrosswordPuzzle : MonoBehaviour
     
     public bool IsCorrectLetter(int x, int y, char letter)
     {
-        return GetLetter(x, y) == char.ToUpper(letter);
+        return GetLetter(x, y) == char.ToUpper(letter, new CultureInfo("tr-TR"));
     }
 }
