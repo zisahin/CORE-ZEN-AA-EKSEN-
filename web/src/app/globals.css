@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global styles - Oyunlaştırılmış Gradient Tema */
+/* Global styles */
 html, body {
   height: 100%;
   margin: 0;
@@ -10,31 +10,60 @@ html, body {
 }
 
 body {
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Gradient Theme */
+.theme-gradient body {
   background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
   background-attachment: fixed;
   color: #ffffff;
-  min-height: 100vh;
 }
 
-/* Parlak beyaz text */
-.text-white {
+/* Classic Theme */
+.theme-classic body {
+  background-color: #f2efe6;
+  color: #0f172a;
+}
+
+/* Parlak beyaz text for gradient mode */
+.theme-gradient .text-white {
   color: #ffffff !important;
 }
 
-/* Scrollbar stilini güzelleştir */
-::-webkit-scrollbar {
+/* Scrollbar stilini güzelleştir - Gradient Mode */
+.theme-gradient ::-webkit-scrollbar {
   width: 10px;
 }
 
-::-webkit-scrollbar-track {
+.theme-gradient ::-webkit-scrollbar-track {
   background: rgba(15, 23, 42, 0.5);
 }
 
-::-webkit-scrollbar-thumb {
+.theme-gradient ::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #7c3aed, #3b82f6);
   border-radius: 5px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.theme-gradient ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #6d28d9, #2563eb);
+}
+
+/* Scrollbar stilini güzelleştir - Classic Mode */
+.theme-classic ::-webkit-scrollbar {
+  width: 10px;
+}
+
+.theme-classic ::-webkit-scrollbar-track {
+  background: #e8e0cc;
+}
+
+.theme-classic ::-webkit-scrollbar-thumb {
+  background: #02215c;
+  border-radius: 5px;
+}
+
+.theme-classic ::-webkit-scrollbar-thumb:hover {
+  background: #031942;
 }

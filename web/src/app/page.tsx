@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useTheme } from '@/context/ThemeContext'
 import TopNav from '@/components/TopNav'
 import TickerBar from '@/components/TickerBar'
 import LeftSidebar from '@/components/LeftSidebar'
@@ -11,14 +12,22 @@ import MapModal from '@/components/MapModal'
 
 export default function Home() {
   const [isMapModalOpen, setIsMapModalOpen] = useState(false)
+  const { isGradient } = useTheme()
+  
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 relative overflow-hidden">
-      {/* Dekoratif Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '700ms' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
-      </div>
+    <div className={`min-h-screen relative overflow-hidden transition-all duration-300 ${
+      isGradient 
+        ? 'bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950' 
+        : 'bg-cream'
+    }`}>
+      {/* Dekoratif Background Elements - Sadece Gradient Mode */}
+      {isGradient && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-20 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '700ms' }}></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
+        </div>
+      )}
 
       {/* Content */}
       <div className="relative z-10">

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTheme } from '@/context/ThemeContext'
 
 interface FinanceData {
   symbol: string
@@ -25,6 +26,7 @@ const generateInitialData = (): FinanceData[] => [
 ]
 
 export default function FinanceTicker() {
+  const { isGradient } = useTheme()
   const [financeData, setFinanceData] = useState<FinanceData[]>(generateInitialData())
   const [isLoading, setIsLoading] = useState(false)
 
@@ -90,11 +92,17 @@ export default function FinanceTicker() {
   const duplicatedData = [...financeData, ...financeData]
 
   return (
-    <div className="relative w-full bg-[var(--brand-blue)] text-white overflow-hidden">
+    <div className={`relative w-full overflow-hidden transition-all duration-300 ${
+      isGradient
+        ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900'
+        : 'bg-brand-blue'
+    }`}>
       {/* Loading indicator */}
       {isLoading && (
         <div className="absolute top-0 left-0 w-full h-1 bg-blue-400/30">
-          <div className="h-full bg-blue-300 animate-pulse"></div>
+          <div className={`h-full animate-pulse ${
+            isGradient ? 'bg-purple-400' : 'bg-blue-300'
+          }`}></div>
         </div>
       )}
 
@@ -104,15 +112,21 @@ export default function FinanceTicker() {
           {duplicatedData.map((item, index) => (
             <div 
               key={`${item.symbol}-${index}`}
-              className="flex items-center gap-3 px-6 whitespace-nowrap border-r border-blue-400/20 last:border-r-0"
+              className={`flex items-center gap-3 px-6 whitespace-nowrap border-r last:border-r-0 ${
+                isGradient ? 'border-white/20' : 'border-blue-400/20'
+              }`}
             >
               {/* Symbol */}
-              <span className="font-mono text-sm text-brand-blue  px-2 py-1 rounded">
+              <span className={`font-mono text-sm px-2 py-1 rounded font-bold ${
+                isGradient ? 'text-white' : 'text-white'
+              }`}>
                 {item.symbol}
               </span>
 
               {/* Price */}
-              <span  className="font-mono text-sm text-brand-blue  px-2 py-1 rounded">
+              <span className={`font-mono text-sm px-2 py-1 rounded ${
+                isGradient ? 'text-white/80' : 'text-white/90'
+              }`}>
                {formatPrice(item.price, item.symbol)}
               </span>
 
@@ -138,7 +152,11 @@ export default function FinanceTicker() {
       </div>
 
       {/* Bottom gradient line */}
-      <div className="h-[2px] bg-gradient-to-r from-green-400 via-yellow-400 to-red-400"></div>
+      <div className={`h-[2px] ${
+        isGradient
+          ? 'bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400'
+          : 'bg-gradient-to-r from-green-400 via-yellow-400 to-red-400'
+      }`}></div>
 
       {/* CSS Animations */}
       <style jsx>{`
