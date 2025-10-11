@@ -8,6 +8,7 @@ import TickerBar from '@/components/TickerBar'
 import LeftSidebar from '@/components/LeftSidebar'
 import RightTimeline from '@/components/RightTimeline'
 import AIBubble from '@/components/AIBubble'
+import NewsDetail from '@/components/NewsDetail'
 import { rssService, RSS_CATEGORIES, RSSNewsItem } from '@/services/rssService'
 
 export default function CategoryPage() {
@@ -17,6 +18,7 @@ export default function CategoryPage() {
   const [news, setNews] = useState<RSSNewsItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [selectedNewsId, setSelectedNewsId] = useState<string | null>(null)
 
   const category = RSS_CATEGORIES[slug as keyof typeof RSS_CATEGORIES]
 
@@ -127,12 +129,10 @@ export default function CategoryPage() {
               {!loading && !error && news.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {news.map((item) => (
-                    <a
+                    <article
                       key={item.id}
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`group backdrop-blur-xl border rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 ${
+                      onClick={() => setSelectedNewsId(item.id)}
+                      className={`group backdrop-blur-xl border rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer ${
                         isGradient
                           ? 'bg-gradient-to-br from-slate-900/50 to-slate-800/50 border-white/10 hover:border-purple-500/50 hover:shadow-purple-900/30'
                           : 'bg-white/90 border-cream-strong hover:border-brand-blue/30 hover:shadow-brand-blue/20'
@@ -188,9 +188,17 @@ export default function CategoryPage() {
                           </span>
                         </div>
                       </div>
-                    </a>
+                    </article>
                   ))}
                 </div>
+              )}
+
+              {/* News Detail Modal */}
+              {selectedNewsId && (
+                <NewsDetail
+                  newsId={selectedNewsId}
+                  onClose={() => setSelectedNewsId(null)}
+                />
               )}
 
               {/* Empty State */}
