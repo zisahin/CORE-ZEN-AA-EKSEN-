@@ -1,0 +1,476 @@
+{
+  "README": "Bu dosya Firebase Firestore'a eklenecek örnek verileri içerir. Her koleksiyon için ayrı bölümler vardır.",
+  
+  "news_collection": [
+    {
+      "title": "İstanbul'da Yeni Metro Hattı Hizmete Açıldı",
+      "content": "İstanbul Büyükşehir Belediyesi, şehrin ulaşım ağını genişleten yeni metro hattını bugün düzenlenen törenle hizmete açtı. Mecidiyeköy-Mahmutbey arasında uzanan 15 kilometrelik hat, günde ortalama 300 bin yolcuya hizmet verecek. Belediye Başkanı, 'Bu proje İstanbul'un ulaşım sorununa önemli bir çözüm getiriyor' dedi.",
+      "author": "Mehmet Yılmaz",
+      "category": "Ulaşım",
+      "location": "İstanbul",
+      "imageUrl": "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800",
+      "imageCaption": "Yeni metro hattının açılış töreni",
+      "xpPoints": 10,
+      "likeCount": 0,
+      "viewCount": 0,
+      "shareCount": 0,
+      "breaking": true,
+      "isVerified": true,
+      "shortSummary": "İstanbul'da yeni metro hattı açıldı. Günde 300 bin yolcuya hizmet verecek.",
+      "mediumSummary": "İstanbul Büyükşehir Belediyesi, Mecidiyeköy-Mahmutbey arasında uzanan 15 kilometrelik yeni metro hattını hizmete açtı. Hat günde 300 bin yolcuya hizmet verecek.",
+      "podcastVersion": "Bugün İstanbul'da heyecan verici bir gelişme yaşandı. Şehrin ulaşım ağını genişleten yeni metro hattı törenle hizmete açıldı...",
+      "mapGuessDetail": "Büyükşehir Belediyesi, şehrin ulaşım ağını genişleten yeni metro hattını bugün düzenlenen törenle hizmete açtı. Mecidiyeköy-Mahmutbey arasında uzanan 15 kilometrelik hat, günde ortalama 300 bin yolcuya hizmet verecek.",
+      "crosswordWords": ["metro", "ulaşım", "istanbul", "hat", "yolcu", "belediye", "tören", "proje"],
+      "quizQuestions": [
+        {
+          "question": "Yeni metro hattı hangi şehirde açıldı?",
+          "options": ["İstanbul", "Ankara", "İzmir", "Bursa"],
+          "correctAnswerIndex": 0,
+          "explanation": "Haber İstanbul'daki yeni metro hattını anlatıyor.",
+          "xpPoints": 5
+        },
+        {
+          "question": "Metro hattı günde kaç yolcuya hizmet verecek?",
+          "options": ["100 bin", "200 bin", "300 bin", "400 bin"],
+          "correctAnswerIndex": 2,
+          "explanation": "Haberde günde ortalama 300 bin yolcuya hizmet vereceği belirtiliyor.",
+          "xpPoints": 5
+        }
+      ]
+    },
+    {
+      "title": "Ankara'da Teknoloji Zirvesi Başladı",
+      "content": "Türkiye'nin en büyük teknoloji etkinliklerinden biri olan TechSummit Ankara, bugün başladı. 3 gün sürecek zirvede yapay zeka, blockchain ve siber güvenlik konuları ele alınacak. Etkinliğe 50'den fazla ülkeden 5 bin katılımcı bekleniyor.",
+      "author": "Ayşe Demir",
+      "category": "Teknoloji",
+      "location": "Ankara",
+      "imageUrl": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800",
+      "imageCaption": "TechSummit Ankara açılış töreni",
+      "xpPoints": 10,
+      "likeCount": 0,
+      "viewCount": 0,
+      "shareCount": 0,
+      "isBreaking": false,
+      "isVerified": true,
+      "shortSummary": "Ankara'da TechSummit başladı. 5 bin katılımcı bekleniyor.",
+      "mediumSummary": "Türkiye'nin en büyük teknoloji etkinliği TechSummit Ankara bugün başladı. 3 gün sürecek zirvede yapay zeka ve siber güvenlik konuları ele alınacak.",
+      "podcastVersion": "Ankara'da teknoloji tutkunları için heyecan verici günler başladı. TechSummit Ankara kapılarını açtı...",
+      "mapGuessDetail": "Türkiye'nin en büyük teknoloji etkinliklerinden biri olan TechSummit, bugün başladı. 3 gün sürecek zirvede yapay zeka, blockchain ve siber güvenlik konuları ele alınacak.",
+      "crosswordWords": ["teknoloji", "zirve", "ankara", "yapay", "zeka", "blockchain", "güvenlik"],
+      "quizQuestions": [
+        {
+          "question": "TechSummit kaç gün sürecek?",
+          "options": ["1 gün", "2 gün", "3 gün", "4 gün"],
+          "correctAnswerIndex": 2,
+          "explanation": "Etkinlik 3 gün sürecek.",
+          "xpPoints": 5
+        }
+      ]
+    },
+    {
+      "title": "İzmir'de Kültür Festivali Coşkusu",
+      "content": "İzmir Kültür Festivali, renkli açılış töreniyle başladı. Festival kapsamında 2 hafta boyunca konserler, tiyatro gösterileri ve sergiler düzenlenecek. İzmir Büyükşehir Belediye Başkanı, 'Festival şehrimize kültürel zenginlik katıyor' dedi.",
+      "author": "Ali Kaya",
+      "category": "Kültür",
+      "location": "İzmir",
+      "imageUrl": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800",
+      "imageCaption": "İzmir Kültür Festivali açılış töreni",
+      "xpPoints": 10,
+      "likeCount": 0,
+      "viewCount": 0,
+      "shareCount": 0,
+      "isBreaking": false,
+      "isVerified": true,
+      "shortSummary": "İzmir'de Kültür Festivali başladı. 2 hafta sürecek.",
+      "mediumSummary": "İzmir Kültür Festivali renkli törенle başladı. 2 hafta boyunca konserler, tiyatro gösterileri ve sergiler düzenlenecek.",
+      "podcastVersion": "İzmir'de kültür ve sanat rüzgarı esiyor. Şehrin en büyük festivali başladı...",
+      "mapGuessDetail": "Kültür Festivali, renkli açılış töreniyle başladı. Festival kapsamında 2 hafta boyunca konserler, tiyatro gösterileri ve sergiler düzenlenecek.",
+      "crosswordWords": ["kültür", "festival", "izmir", "konser", "tiyatro", "sergi", "sanat"],
+      "quizQuestions": [
+        {
+          "question": "Festival kaç hafta sürecek?",
+          "options": ["1 hafta", "2 hafta", "3 hafta", "1 ay"],
+          "correctAnswerIndex": 1,
+          "explanation": "Festival 2 hafta sürecek.",
+          "xpPoints": 5
+        }
+      ]
+    },
+    {
+      "title": "Bursa'da Organik Tarım Projesi",
+      "content": "Bursa Büyükşehir Belediyesi, organik tarımı teşvik etmek için yeni bir proje başlattı. Proje kapsamında çiftçilere eğitim ve tohum desteği verilecek. Belediye Başkanı, 'Sağlıklı gıda üretimi için çalışıyoruz' dedi.",
+      "author": "Fatma Şahin",
+      "category": "Tarım",
+      "location": "Bursa",
+      "imageUrl": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800",
+      "imageCaption": "Organik tarım arazisi",
+      "xpPoints": 10,
+      "likeCount": 0,
+      "viewCount": 0,
+      "shareCount": 0,
+      "isBreaking": false,
+      "isVerified": true,
+      "shortSummary": "Bursa'da organik tarım projesi başladı.",
+      "mediumSummary": "Bursa Büyükşehir Belediyesi organik tarımı teşvik için proje başlattı. Çiftçilere eğitim ve tohum desteği verilecek.",
+      "podcastVersion": "Bursa'da tarımda yeni bir dönem başlıyor. Organik tarım projesi hayata geçiyor...",
+      "mapGuessDetail": "Büyükşehir Belediyesi, organik tarımı teşvik etmek için yeni bir proje başlattı. Proje kapsamında çiftçilere eğitim ve tohum desteği verilecek.",
+      "crosswordWords": ["organik", "tarım", "bursa", "çiftçi", "tohum", "eğitim", "proje"],
+      "quizQuestions": [
+        {
+          "question": "Proje kapsamında çiftçilere ne verilecek?",
+          "options": ["Sadece eğitim", "Sadece tohum", "Eğitim ve tohum", "Para"],
+          "correctAnswerIndex": 2,
+          "explanation": "Çiftçilere hem eğitim hem de tohum desteği verilecek.",
+          "xpPoints": 5
+        }
+      ]
+    },
+    {
+      "title": "Antalya'da Turizm Rekoru",
+      "content": "Antalya, bu yıl 15 milyon turisti ağırlayarak rekor kırdı. Vali, 'Antalya turizmin başkenti olmaya devam ediyor' açıklamasında bulundu. Oteller %95 doluluk oranına ulaştı.",
+      "author": "Hasan Yılmaz",
+      "category": "Turizm",
+      "location": "Antalya",
+      "imageUrl": "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800",
+      "imageCaption": "Antalya sahil şeridi",
+      "xpPoints": 10,
+      "likeCount": 0,
+      "viewCount": 0,
+      "shareCount": 0,
+      "isBreaking": true,
+      "isVerified": true,
+      "shortSummary": "Antalya 15 milyon turistle rekor kırdı.",
+      "mediumSummary": "Antalya bu yıl 15 milyon turisti ağırlayarak turizm rekoru kırdı. Otellerde %95 doluluk oranına ulaşıldı.",
+      "podcastVersion": "Antalya'dan müjdeli haber geldi. Şehir turizm rekorunu kırdı...",
+      "mapGuessDetail": "Şehir, bu yıl 15 milyon turisti ağırlayarak rekor kırdı. Oteller %95 doluluk oranına ulaştı.",
+      "crosswordWords": ["turizm", "antalya", "rekor", "turist", "otel", "doluluk"],
+      "quizQuestions": [
+        {
+          "question": "Antalya bu yıl kaç milyon turist ağırladı?",
+          "options": ["10 milyon", "12 milyon", "15 milyon", "20 milyon"],
+          "correctAnswerIndex": 2,
+          "explanation": "Antalya bu yıl 15 milyon turist ağırladı.",
+          "xpPoints": 5
+        }
+      ]
+    }
+  ],
+  
+  "time_tunnel_categories": [
+    {
+      "title": "Ekrem İmamoğlu Tutuklanma Süreci",
+      "description": "İstanbul Büyükşehir Belediye Başkanı Ekrem İmamoğlu'nun yargı süreciyle ilgili gelişmeler",
+      "coverImageUrl": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800",
+      "newsIds": [],
+      "isActive": true
+    },
+    {
+      "title": "Özgür Özel'in CHP Genel Başkanlığı Süreci",
+      "description": "Özgür Özel'in CHP Genel Başkanı seçilme süreciyle ilgili haberler",
+      "coverImageUrl": "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=800",
+      "newsIds": [],
+      "isActive": true
+    },
+    {
+      "title": "2024 Yerel Seçimleri",
+      "description": "Türkiye genelinde yapılan yerel seçim sürecinin kronolojisi",
+      "coverImageUrl": "https://images.unsplash.com/photo-1495954484750-af469f2f9be5?w=800",
+      "newsIds": [],
+      "isActive": true
+    }
+  ],
+  
+  "crossword_categories": [
+    {
+      "name": "Siyaset",
+      "description": "Siyasetle ilgili kelimeler",
+      "iconUrl": "https://img.icons8.com/color/96/politics.png",
+      "xpPoints": 50,
+      "wordGroups": [],
+      "isActive": true
+    },
+    {
+      "name": "Ekonomi",
+      "description": "Ekonomiyle ilgili kelimeler",
+      "iconUrl": "https://img.icons8.com/color/96/money.png",
+      "xpPoints": 50,
+      "wordGroups": [],
+      "isActive": true
+    },
+    {
+      "name": "Spor",
+      "description": "Sporla ilgili kelimeler",
+      "iconUrl": "https://img.icons8.com/color/96/soccer-ball.png",
+      "xpPoints": 50,
+      "wordGroups": [],
+      "isActive": true
+    },
+    {
+      "name": "Teknoloji",
+      "description": "Teknolojiyle ilgili kelimeler",
+      "iconUrl": "https://img.icons8.com/color/96/technology.png",
+      "xpPoints": 50,
+      "wordGroups": [],
+      "isActive": true
+    }
+  ],
+  
+  "crossword_word_groups": [
+    {
+      "categoryId": "siyaset_category_id",
+      "difficulty": "medium",
+      "words": [
+        {"word": "MECLIS", "hint": "Yasama organı", "xpPoints": 5},
+        {"word": "SEÇİM", "hint": "Demokratik süreç", "xpPoints": 5},
+        {"word": "PARTI", "hint": "Siyasi oluşum", "xpPoints": 5},
+        {"word": "BAŞKAN", "hint": "Yönetici", "xpPoints": 5},
+        {"word": "BAKAN", "hint": "Bakanlık yöneticisi", "xpPoints": 5},
+        {"word": "MİLLETVEKİLİ", "hint": "Halk temsilcisi", "xpPoints": 5},
+        {"word": "ANAYASA", "hint": "Temel kanun", "xpPoints": 5},
+        {"word": "HÜKÜMET", "hint": "İcra organı", "xpPoints": 5},
+        {"word": "OY", "hint": "Seçim hakkı", "xpPoints": 5},
+        {"word": "KOALISYON", "hint": "İttifak", "xpPoints": 5}
+      ],
+      "isActive": true
+    },
+    {
+      "categoryId": "ekonomi_category_id",
+      "difficulty": "medium",
+      "words": [
+        {"word": "ENFLASYON", "hint": "Fiyat artışı", "xpPoints": 5},
+        {"word": "BORSA", "hint": "Menkul kıymet piyasası", "xpPoints": 5},
+        {"word": "DOLAR", "hint": "Amerikan para birimi", "xpPoints": 5},
+        {"word": "FAİZ", "hint": "Borçlanma maliyeti", "xpPoints": 5},
+        {"word": "BÜTÇE", "hint": "Mali plan", "xpPoints": 5},
+        {"word": "İHRACAT", "hint": "Dışa satış", "xpPoints": 5},
+        {"word": "İTHALAT", "hint": "Dışardan alım", "xpPoints": 5},
+        {"word": "VERGİ", "hint": "Mali yükümlülük", "xpPoints": 5},
+        {"word": "BANKA", "hint": "Mali kurum", "xpPoints": 5},
+        {"word": "KREDİ", "hint": "Borç", "xpPoints": 5}
+      ],
+      "isActive": true
+    },
+    {
+      "categoryId": "spor_category_id",
+      "difficulty": "easy",
+      "words": [
+        {"word": "FUTBOL", "hint": "En popüler takım sporu", "xpPoints": 5},
+        {"word": "BASKETBOL", "hint": "Potaya top atma oyunu", "xpPoints": 5},
+        {"word": "VOLEYBOL", "hint": "Fileli oyun", "xpPoints": 5},
+        {"word": "YÜZME", "hint": "Su sporu", "xpPoints": 5},
+        {"word": "KOŞU", "hint": "Atletizm dalı", "xpPoints": 5},
+        {"word": "TENİS", "hint": "Raketli oyun", "xpPoints": 5},
+        {"word": "GÜREŞ", "hint": "Milli spor", "xpPoints": 5},
+        {"word": "BOKS", "hint": "Yumruklu dövüş", "xpPoints": 5},
+        {"word": "ATICILIK", "hint": "Hedef sporları", "xpPoints": 5},
+        {"word": "JİMNASTİK", "hint": "Cimnastik", "xpPoints": 5}
+      ],
+      "isActive": true
+    }
+  ],
+  
+  "quiz_categories": [
+    {
+      "name": "Genel Kültür",
+      "description": "Genel kültür soruları",
+      "iconUrl": "https://img.icons8.com/color/96/brain.png",
+      "questionIds": [],
+      "isActive": true
+    },
+    {
+      "name": "Tarih",
+      "description": "Tarih soruları",
+      "iconUrl": "https://img.icons8.com/color/96/clock.png",
+      "questionIds": [],
+      "isActive": true
+    },
+    {
+      "name": "Coğrafya",
+      "description": "Coğrafya soruları",
+      "iconUrl": "https://img.icons8.com/color/96/globe.png",
+      "questionIds": [],
+      "isActive": true
+    }
+  ],
+  
+  "quiz_questions": [
+    {
+      "categoryId": "genel_kultur_id",
+      "question": "Türkiye'nin başkenti neresidir?",
+      "options": ["İstanbul", "Ankara", "İzmir", "Bursa"],
+      "correctAnswerIndex": 1,
+      "explanation": "Türkiye'nin başkenti 1923 yılından beri Ankara'dır.",
+      "xpPoints": 10,
+      "difficulty": "easy",
+      "isActive": true
+    },
+    {
+      "categoryId": "genel_kultur_id",
+      "question": "Türkiye kaç ile sahiptir?",
+      "options": ["79", "80", "81", "82"],
+      "correctAnswerIndex": 2,
+      "explanation": "Türkiye 81 ile sahiptir.",
+      "xpPoints": 10,
+      "difficulty": "easy",
+      "isActive": true
+    },
+    {
+      "categoryId": "tarih_id",
+      "question": "Türkiye Cumhuriyeti hangi yıl kurulmuştur?",
+      "options": ["1920", "1921", "1922", "1923"],
+      "correctAnswerIndex": 3,
+      "explanation": "Türkiye Cumhuriyeti 29 Ekim 1923'te ilan edilmiştir.",
+      "xpPoints": 10,
+      "difficulty": "easy",
+      "isActive": true
+    },
+    {
+      "categoryId": "cografya_id",
+      "question": "Türkiye'nin en büyük gölü hangisidir?",
+      "options": ["Van Gölü", "Tuz Gölü", "Beyşehir Gölü", "Eğirdir Gölü"],
+      "correctAnswerIndex": 0,
+      "explanation": "Van Gölü Türkiye'nin en büyük gölüdür.",
+      "xpPoints": 10,
+      "difficulty": "medium",
+      "isActive": true
+    }
+  ],
+  
+  "daily_tasks": [
+    {
+      "title": "2 Haber Oku",
+      "description": "Bugün en az 2 haber oku ve bilgilen",
+      "type": "read_news",
+      "targetCount": 2,
+      "xpReward": 20,
+      "isActive": true
+    },
+    {
+      "title": "1 Haber Paylaş",
+      "description": "İlginç bulduğun bir haberi paylaş",
+      "type": "share_news",
+      "targetCount": 1,
+      "xpReward": 15,
+      "isActive": true
+    },
+    {
+      "title": "5 Quiz Sorusu Çöz",
+      "description": "Quiz oyununda 5 soru çöz",
+      "type": "solve_quiz",
+      "targetCount": 5,
+      "xpReward": 25,
+      "isActive": true
+    },
+    {
+      "title": "1 Çengel Bulmaca Tamamla",
+      "description": "Bir çengel bulmaca tamamla",
+      "type": "solve_crossword",
+      "targetCount": 1,
+      "xpReward": 30,
+      "isActive": true
+    }
+  ],
+  
+  "badges": [
+    {
+      "name": "İlk Adım",
+      "description": "İlk haberini okudun",
+      "iconUrl": "https://img.icons8.com/color/96/first-place.png",
+      "rarity": "common",
+      "requirement": {
+        "type": "news_read",
+        "count": 1
+      },
+      "xpReward": 10,
+      "isActive": true
+    },
+    {
+      "name": "Haber Kurdu",
+      "description": "10 haber okudun",
+      "iconUrl": "https://img.icons8.com/color/96/news.png",
+      "rarity": "rare",
+      "requirement": {
+        "type": "news_read",
+        "count": 10
+      },
+      "xpReward": 50,
+      "isActive": true
+    },
+    {
+      "name": "Quiz Ustası",
+      "description": "50 quiz sorusu çözdün",
+      "iconUrl": "https://img.icons8.com/color/96/brain.png",
+      "rarity": "epic",
+      "requirement": {
+        "type": "quiz_solved",
+        "count": 50
+      },
+      "xpReward": 100,
+      "isActive": true
+    },
+    {
+      "name": "Kelime Avcısı",
+      "description": "20 çengel bulmaca tamamladın",
+      "iconUrl": "https://img.icons8.com/color/96/crossword.png",
+      "rarity": "epic",
+      "requirement": {
+        "type": "crossword_solved",
+        "count": 20
+      },
+      "xpReward": 100,
+      "isActive": true
+    },
+    {
+      "name": "Coğrafya Dehası",
+      "description": "25 harita tahmini doğru bildin",
+      "iconUrl": "https://img.icons8.com/color/96/globe.png",
+      "rarity": "legendary",
+      "requirement": {
+        "type": "map_guess_correct",
+        "count": 25
+      },
+      "xpReward": 200,
+      "isActive": true
+    }
+  ],
+  
+  "ai_questions": [
+    {
+      "question": "Yaşam şartlarından memnun musunuz?",
+      "options": ["Evet, memnunum", "Kısmen memnunum", "Hayır, memnun değilim"],
+      "category": "social",
+      "responses": {
+        "Evet, memnunum": 0,
+        "Kısmen memnunum": 0,
+        "Hayır, memnun değilim": 0
+      },
+      "totalResponses": 0,
+      "isActive": true
+    },
+    {
+      "question": "Ülkenin ekonomik gidişatını nasıl değerlendiriyorsunuz?",
+      "options": ["İyi gidiyor", "Orta", "Kötü gidiyor"],
+      "category": "economic",
+      "responses": {
+        "İyi gidiyor": 0,
+        "Orta": 0,
+        "Kötü gidiyor": 0
+      },
+      "totalResponses": 0,
+      "isActive": true
+    },
+    {
+      "question": "Dijital haberciliği geleneksel haberciliğe tercih eder misiniz?",
+      "options": ["Evet", "Hayır", "Fark etmez"],
+      "category": "technology",
+      "responses": {
+        "Evet": 0,
+        "Hayır": 0,
+        "Fark etmez": 0
+      },
+      "totalResponses": 0,
+      "isActive": true
+    }
+  ]
+}
+

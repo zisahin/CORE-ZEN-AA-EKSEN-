@@ -1,0 +1,5 @@
+/build
+firebase-credentials.json
+/venv
+.venv
+venv

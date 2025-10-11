@@ -1,0 +1,159 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ==================== HELPER FUNCTIONS ====================
+    
+    // Kullanıcı giriş yapmış mı?
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // Kullanıcı kendi profilini mi düzenliyor?
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    // Kullanıcı premium mi?
+    function isPremium() {
+      return isSignedIn() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isPremium == true;
+    }
+    
+    // ==================== USERS (Kullanıcılar) ====================
+    
+    match /users/{userId} {
+      // Herkes kendi profilini okuyabilir ve güncelleyebilir
+      allow read: if isOwner(userId);
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+    }
+    
+    // ==================== NEWS (Haberler) ====================
+    
+    match /news/{newsId} {
+      // Tüm haberler herkese açık (okuma)
+      allow read: if true;
+      
+      // Haberleri sadece admin kullanıcılar ekleyebilir/düzenleyebilir
+      // Bu kısmı Cloud Functions veya Admin SDK ile yönetmelisiniz
+      allow write: if false;
+    }
+    
+    // ==================== TIME TUNNEL (Zaman Tüneli) ====================
+    
+    match /time_tunnel_categories/{categoryId} {
+      // Zaman tüneli kategorileri herkese açık
+      allow read: if true;
+      allow write: if false; // Sadece admin
+    }
+    
+    // ==================== CROSSWORD (Çengel Bulmaca) ====================
+    
+    match /crossword_categories/{categoryId} {
+      allow read: if true;
+      allow write: if false; // Sadece admin
+    }
+    
+    match /crossword_word_groups/{groupId} {
+      allow read: if true;
+      allow write: if false; // Sadece admin
+    }
+    
+    // ==================== QUIZ ====================
+    
+    match /quiz_categories/{categoryId} {
+      allow read: if true;
+      allow write: if false; // Sadece admin
+    }
+    
+    match /quiz_questions/{questionId} {
+      allow read: if true;
+      allow write: if false; // Sadece admin
+    }
+    
+    // ==================== MAP GUESS GAME (Harita Tahmin) ====================
+    
+    match /map_guess_games/{gameId} {
+      allow read: if true;
+      allow write: if false; // Sadece admin
+    }
+    
+    // ==================== USER GAME STATS (Kullanıcı Oyun İstatistikleri) ====================
+    
+    match /user_game_stats/{userId} {
+      // Kullanıcı kendi istatistiklerini okuyabilir
+      allow read: if isOwner(userId);
+      
+      // İstatistikler otomatik güncellenir (Cloud Functions veya güvenli backend)
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId);
+      allow delete: if false;
+    }
+    
+    // ==================== DAILY TASKS (Günlük Görevler) ====================
+    
+    match /daily_tasks/{taskId} {
+      // Görevler herkese açık
+      allow read: if true;
+      allow write: if false; // Sadece admin veya Cloud Functions
+    }
+    
+    match /user_task_progress/{progressId} {
+      // Kullanıcı kendi görev ilerlemesini okuyabilir ve güncelleyebilir
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if false;
+    }
+    
+    // ==================== BADGES (Rozetler) ====================
+    
+    match /badges/{badgeId} {
+      // Rozetler herkese açık
+      allow read: if true;
+      allow write: if false; // Sadece admin
+    }
+    
+    // ==================== AI CHATS ====================
+    
+    match /ai_chats/{chatId} {
+      // Kullanıcı kendi chat geçmişini okuyabilir ve yazabilir
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+    
+    // ==================== AI QUESTIONS (AA AI Soruyor) ====================
+    
+    match /ai_questions/{questionId} {
+      // Sorular herkese açık
+      allow read: if true;
+      
+      // Cevap sayılarını güncelleme - güvenli bir şekilde Cloud Functions ile yapılmalı
+      allow write: if false;
+    }
+    
+    match /user_question_responses/{responseId} {
+      // Kullanıcı kendi cevaplarını okuyabilir
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      
+      // Kullanıcı sadece bir kez cevap verebilir
+      allow create: if isSignedIn() && 
+                      request.resource.data.userId == request.auth.uid &&
+                      !exists(/databases/$(database)/documents/user_question_responses/$(responseId));
+      
+      allow update, delete: if false;
+    }
+    
+    // ==================== DEFAULT RULE ====================
+    
+    // Diğer tüm koleksiyonlar için varsayılan reddetme
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

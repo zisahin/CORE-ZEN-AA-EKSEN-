@@ -1,0 +1,42 @@
+🔥 FIREBASE SERVICE ACCOUNT ADIM ADIM REHBER
+
+1️⃣ Firebase Console'a Git
+   → https://console.firebase.google.com/
+   → Projenizi seçin
+
+2️⃣ Project Settings'e Git
+   → Sol menüden ⚙️ "Project Settings" tıkla
+   → Üst menüden "Service accounts" sekmesi
+
+3️⃣ Private Key Oluştur
+   → "Generate new private key" butonuna tıkla
+   → Uyarı mesajında "Generate key" tıkla
+   → JSON dosyası otomatik indirilir
+
+4️⃣ Dosyayı Yerleştir
+   → İndirilen dosyayı video_backend/ klasörüne kopyala
+   → Adını "firebase-credentials.json" yap
+
+5️⃣ Storage Aktifleştir
+   → Sol menüden "Storage" seç
+   → "Get started" → "Start in test mode" → "Done"
+
+6️⃣ Bucket URL'ini Kopyala
+   → Storage sayfasında üstte bucket URL'i var
+   → Örnek: "aa-eksen-12345.appspot.com"
+   → main.py'da bu URL'yi güncelle
+
+7️⃣ Test Et
+   → cd video_backend
+   → source venv/bin/activate
+   → python main.py
+
+✅ BAŞARILI ÇIKTI:
+   "✅ Firebase bağlantısı kuruldu"
+   "🔥 Firebase listener aktif!"
+
+❌ HATA DURUMUNDA:
+   - Dosya adını kontrol et: firebase-credentials.json
+   - Dosya konumunu kontrol et: video_backend/ klasöründe
+   - JSON formatının bozuk olmadığını kontrol et
+   - Storage'ın aktif olduğunu kontrol et
