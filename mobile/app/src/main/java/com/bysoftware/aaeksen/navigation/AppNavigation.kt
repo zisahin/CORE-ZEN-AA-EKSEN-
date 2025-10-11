@@ -1,6 +1,7 @@
 package com.bysoftware.aaeksen.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
@@ -24,6 +25,9 @@ import com.bysoftware.aaeksen.ui.screens.TimeTunnelDetailScreen
 import com.bysoftware.aaeksen.ui.screens.ProfileScreen
 import com.bysoftware.aaeksen.ui.screens.LoginScreen
 import com.bysoftware.aaeksen.ui.screens.RegisterScreen
+import com.bysoftware.aaeksen.ui.screens.VideoPlayerScreen
+import com.bysoftware.aaeksen.ui.screens.VideoGenerationScreen
+import com.bysoftware.aaeksen.ui.screens.VideoListScreen
 
 @Composable
 fun AppNavigation(
@@ -59,25 +63,23 @@ fun AppNavigation(
             )
         }
         
-        composable("Oyunlar") {
-            // Placeholder for Discover screen
-            HomeScreen(
-                onNewsClick = { newsItem ->
-                    navController.navigate("news_detail/${newsItem.id}")
+                composable("Oyunlar") {
+                    com.bysoftware.aaeksen.ui.screens.GamesScreen(navController = navController)
                 }
-            )
-        }
         
-        composable("center") {
-            HomeScreen(
-                onNewsClick = { newsItem ->
-                    navController.navigate("news_detail/${newsItem.id}")
-                },
-                onAIChatClick = {
-                    navController.navigate("ai_chat")
+                composable("center") {
+                    HomeScreen(
+                        onNewsClick = { newsItem ->
+                            navController.navigate("news_detail/${newsItem.id}")
+                        },
+                        onAIChatClick = {
+                            navController.navigate("ai_chat")
+                        },
+                        onVideoListClick = {
+                            navController.navigate("video_list")
+                        }
+                    )
                 }
-            )
-        }
         
         composable("ai_chat") {
             AiChatScreen(
@@ -146,6 +148,67 @@ fun AppNavigation(
                                 popUpTo("register") { inclusive = true }
                             }
                         }
+                    )
+                }
+
+                // Video Ekranları
+                composable("video_list") {
+                    VideoListScreen(navController = navController)
+                }
+
+                composable("video_player/{videoId}") { backStackEntry ->
+                    val videoId = backStackEntry.arguments?.getString("videoId") ?: ""
+                    VideoPlayerScreen(
+                        videoId = videoId,
+                        navController = navController
+                    )
+                }
+
+                composable("video_generation") {
+                    VideoGenerationScreen(navController = navController)
+                }
+
+                composable("daily_tasks") {
+                    com.bysoftware.aaeksen.ui.screens.DailyTasksScreen(navController = navController)
+                }
+
+                // Standalone Oyunlar
+                composable("standalone_quiz") {
+                    com.bysoftware.aaeksen.ui.screens.StandaloneQuizScreen(navController = navController)
+                }
+
+                composable("standalone_map_guess") {
+                    com.bysoftware.aaeksen.ui.screens.StandaloneMapGuessScreen(navController = navController)
+                }
+
+                composable("quiz_play/{category}") { backStackEntry ->
+                    val category = backStackEntry.arguments?.getString("category") ?: "Genel"
+                    com.bysoftware.aaeksen.ui.screens.QuizPlayScreen(
+                        navController = navController,
+                        category = category
+                    )
+                }
+
+                composable("standalone_map_guess_menu") {
+                    com.bysoftware.aaeksen.ui.screens.StandaloneMapGuessMenuScreen(navController = navController)
+                }
+
+                composable("news_detail/{newsId}?autoStartMapGuess={autoStartMapGuess}&autoStartQuiz={autoStartQuiz}") { backStackEntry ->
+                    val newsId = backStackEntry.arguments?.getString("newsId") ?: ""
+                    val autoStartMapGuess = backStackEntry.arguments?.getString("autoStartMapGuess")?.toBoolean() ?: false
+                    val autoStartQuiz = backStackEntry.arguments?.getString("autoStartQuiz")?.toBoolean() ?: false
+                    val newsDetailViewModel: NewsDetailViewModel = hiltViewModel()
+                    
+                    LaunchedEffect(newsId) {
+                        newsDetailViewModel.loadNews(newsId)
+                    }
+                    
+                    com.bysoftware.aaeksen.ui.screens.NewsDetailScreen(
+                        newsId = newsId,
+                        viewModel = newsDetailViewModel,
+                        onBackClick = { navController.popBackStack() },
+                        autoStartMapGuess = autoStartMapGuess,
+                        autoStartQuiz = autoStartQuiz
                     )
                 }
     }

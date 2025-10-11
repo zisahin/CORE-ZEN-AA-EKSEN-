@@ -2,8 +2,12 @@ package com.bysoftware.aaeksen.data.firebase.repository
 
 import com.bysoftware.aaeksen.core.constants.FirebaseConfig
 import com.bysoftware.aaeksen.data.firebase.model.*
+import com.bysoftware.aaeksen.data.firebase.model.UserTaskProgress
+import com.bysoftware.aaeksen.data.firebase.model.DailyTask
+import com.bysoftware.aaeksen.data.firebase.model.Badge
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -206,14 +210,14 @@ class UserRepository @Inject constructor(
     /**
      * Aktif günlük görevleri getir
      */
-    suspend fun getDailyTasks(): Result<List<DailyTask>> {
+    suspend fun getDailyTasks(): Result<List<com.bysoftware.aaeksen.data.firebase.model.DailyTask>> {
         return try {
             val tasks = firestore.collection(FirebaseConfig.Collections.DAILY_TASKS)
-                .whereEqualTo("isActive", true)
+                .whereEqualTo("active", true)
                 .whereGreaterThan("expiresAt", com.google.firebase.Timestamp.now())
                 .get()
                 .await()
-                .toObjects(DailyTask::class.java)
+                .toObjects(com.bysoftware.aaeksen.data.firebase.model.DailyTask::class.java)
             Result.success(tasks)
         } catch (e: Exception) {
             Result.failure(e)
@@ -223,14 +227,14 @@ class UserRepository @Inject constructor(
     /**
      * Kullanıcının görev ilerlemesini getir
      */
-    suspend fun getUserTaskProgress(userId: String): Result<List<UserTaskProgress>> {
+    suspend fun getUserTaskProgress(userId: String): Result<List<com.bysoftware.aaeksen.data.firebase.model.UserTaskProgress>> {
         return try {
             val progress = firestore.collection(FirebaseConfig.Collections.USER_TASK_PROGRESS)
                 .whereEqualTo("userId", userId)
                 .whereEqualTo("isCompleted", false)
                 .get()
                 .await()
-                .toObjects(UserTaskProgress::class.java)
+                .toObjects(com.bysoftware.aaeksen.data.firebase.model.UserTaskProgress::class.java)
             Result.success(progress)
         } catch (e: Exception) {
             Result.failure(e)
@@ -251,7 +255,7 @@ class UserRepository @Inject constructor(
                 .document(taskId)
                 .get()
                 .await()
-                .toObject(DailyTask::class.java) ?: return Result.success(false)
+                .toObject(com.bysoftware.aaeksen.data.firebase.model.DailyTask::class.java) ?: return Result.success(false)
             
             // İlerleme dokümanı ID'si
             val progressDocId = "${userId}_${taskId}"
@@ -264,7 +268,7 @@ class UserRepository @Inject constructor(
                 val snapshot = transaction.get(progressRef)
                 
                 if (snapshot.exists()) {
-                    val current = snapshot.toObject(UserTaskProgress::class.java)
+                    val current = snapshot.toObject(com.bysoftware.aaeksen.data.firebase.model.UserTaskProgress::class.java)
                     val newCount = (current?.currentCount ?: 0) + incrementBy
                     
                     if (newCount >= task.targetCount && current?.isCompleted == false) {
@@ -280,7 +284,7 @@ class UserRepository @Inject constructor(
                     }
                 } else {
                     // Yeni ilerleme oluştur
-                    val newProgress = UserTaskProgress(
+                    val newProgress = com.bysoftware.aaeksen.data.firebase.model.UserTaskProgress(
                         id = progressDocId,
                         userId = userId,
                         taskId = taskId,
@@ -317,7 +321,7 @@ class UserRepository @Inject constructor(
                 .document(badgeId)
                 .get()
                 .await()
-                .toObject(Badge::class.java) ?: return Result.failure(Exception("Badge not found"))
+                .toObject(com.bysoftware.aaeksen.data.firebase.model.Badge::class.java) ?: return Result.failure(Exception("Badge not found"))
             
             // Kullanıcının mevcut rozetlerini al
             val user = firestore.collection(FirebaseConfig.Collections.USERS)
@@ -375,14 +379,19 @@ class UserRepository @Inject constructor(
                 if (user.badges.any { it.badgeId == badge.id }) continue
                 
                 // Gereksinim kontrolü
-                val requirement = badge.requirement ?: continue
-                val meetsRequirement = when (requirement.type) {
-                    "news_read" -> user.newsReadCount >= requirement.count
-                    "news_shared" -> user.newsSharedCount >= requirement.count
-                    "xp_earned" -> user.totalXp >= requirement.count
-                    "quiz_solved" -> (gameStats?.quizCorrect ?: 0) >= requirement.count
-                    "crossword_solved" -> (gameStats?.crosswordSolved ?: 0) >= requirement.count
-                    "map_guess_correct" -> (gameStats?.mapGuessCorrect ?: 0) >= requirement.count
+                val requirement = badge.requirement
+                if (requirement.isEmpty()) continue
+                
+                val requirementType = requirement["type"] as? String ?: continue
+                val requirementCount = (requirement["count"] as? Number)?.toLong() ?: continue
+                
+                val meetsRequirement = when (requirementType) {
+                    "news_read" -> user.newsReadCount >= requirementCount
+                    "news_shared" -> user.newsSharedCount >= requirementCount
+                    "xp_earned" -> user.totalXp >= requirementCount
+                    "quiz_solved" -> (gameStats?.quizCorrect ?: 0) >= requirementCount
+                    "crossword_solved" -> (gameStats?.crosswordSolved ?: 0) >= requirementCount
+                    "map_guess_correct" -> (gameStats?.mapGuessCorrect ?: 0) >= requirementCount
                     else -> false
                 }
                 
@@ -401,13 +410,13 @@ class UserRepository @Inject constructor(
     /**
      * Tüm rozetleri getir
      */
-    suspend fun getAllBadges(): Result<List<Badge>> {
+    suspend fun getAllBadges(): Result<List<com.bysoftware.aaeksen.data.firebase.model.Badge>> {
         return try {
             val badges = firestore.collection(FirebaseConfig.Collections.BADGES)
-                .whereEqualTo("isActive", true)
+                .whereEqualTo("active", true)
                 .get()
                 .await()
-                .toObjects(Badge::class.java)
+                .toObjects(com.bysoftware.aaeksen.data.firebase.model.Badge::class.java)
             Result.success(badges)
         } catch (e: Exception) {
             Result.failure(e)

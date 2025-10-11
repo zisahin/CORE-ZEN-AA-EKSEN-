@@ -49,6 +49,7 @@ class SampleDataInitializer @Inject constructor(
             loadBadges()
             loadAIQuestions()
             loadSampleUser()
+            loadSampleVideos()
 
             // Başarılı, kaydet
             prefs.edit().putBoolean(KEY_DATA_INITIALIZED, true).apply()
@@ -62,12 +63,12 @@ class SampleDataInitializer @Inject constructor(
     }
 
     /**
-     * Verileri sıfırla (test için)
+     * Verileri sıfırla (sadece geliştirme için - manuel kullanım)
      */
     fun resetInitializationFlag(context: Context) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().putBoolean(KEY_DATA_INITIALIZED, false).apply()
-        Log.d(TAG, "Başlatma bayrağı sıfırlandı")
+        Log.d(TAG, "⚠️ Başlatma bayrağı manuel olarak sıfırlandı")
     }
 
     // ==================== HABERLER ====================
@@ -503,7 +504,7 @@ class SampleDataInitializer @Inject constructor(
                 targetCount = 2,
                 xpReward = 20,
                 expiresAt = endOfDay,
-                isActive = true,
+                active = true,
                 createdAt = Timestamp.now()
             ),
             DailyTask(
@@ -513,7 +514,7 @@ class SampleDataInitializer @Inject constructor(
                 targetCount = 1,
                 xpReward = 15,
                 expiresAt = endOfDay,
-                isActive = true,
+                active = true,
                 createdAt = Timestamp.now()
             ),
             DailyTask(
@@ -523,7 +524,7 @@ class SampleDataInitializer @Inject constructor(
                 targetCount = 5,
                 xpReward = 25,
                 expiresAt = endOfDay,
-                isActive = true,
+                active = true,
                 createdAt = Timestamp.now()
             ),
             DailyTask(
@@ -533,7 +534,7 @@ class SampleDataInitializer @Inject constructor(
                 targetCount = 1,
                 xpReward = 30,
                 expiresAt = endOfDay,
-                isActive = true,
+                active = true,
                 createdAt = Timestamp.now()
             )
         )
@@ -558,9 +559,9 @@ class SampleDataInitializer @Inject constructor(
                 description = "İlk haberini okudun",
                 iconUrl = "https://img.icons8.com/color/96/first-place.png",
                 rarity = "common",
-                requirement = BadgeRequirement("news_read", 1),
+                requirement = mapOf("type" to "news_read", "count" to 1),
                 xpReward = 10,
-                isActive = true,
+                active = true,
                 createdAt = Timestamp.now()
             ),
             Badge(
@@ -568,9 +569,9 @@ class SampleDataInitializer @Inject constructor(
                 description = "10 haber okudun",
                 iconUrl = "https://img.icons8.com/color/96/news.png",
                 rarity = "rare",
-                requirement = BadgeRequirement("news_read", 10),
+                requirement = mapOf("type" to "news_read", "count" to 10),
                 xpReward = 50,
-                isActive = true,
+                active = true,
                 createdAt = Timestamp.now()
             ),
             Badge(
@@ -578,9 +579,9 @@ class SampleDataInitializer @Inject constructor(
                 description = "50 quiz sorusu çözdün",
                 iconUrl = "https://img.icons8.com/color/96/brain.png",
                 rarity = "epic",
-                requirement = BadgeRequirement("quiz_solved", 50),
+                requirement = mapOf("type" to "quiz_solved", "count" to 50),
                 xpReward = 100,
-                isActive = true,
+                active = true,
                 createdAt = Timestamp.now()
             ),
             Badge(
@@ -588,9 +589,9 @@ class SampleDataInitializer @Inject constructor(
                 description = "20 çengel bulmaca tamamladın",
                 iconUrl = "https://img.icons8.com/color/96/crossword.png",
                 rarity = "epic",
-                requirement = BadgeRequirement("crossword_solved", 20),
+                requirement = mapOf("type" to "crossword_solved", "count" to 20),
                 xpReward = 100,
-                isActive = true,
+                active = true,
                 createdAt = Timestamp.now()
             ),
             Badge(
@@ -598,9 +599,9 @@ class SampleDataInitializer @Inject constructor(
                 description = "25 harita tahmini doğru bildin",
                 iconUrl = "https://img.icons8.com/color/96/globe.png",
                 rarity = "legendary",
-                requirement = BadgeRequirement("map_guess_correct", 25),
+                requirement = mapOf("type" to "map_guess_correct", "count" to 25),
                 xpReward = 200,
-                isActive = true,
+                active = true,
                 createdAt = Timestamp.now()
             )
         )
@@ -731,6 +732,45 @@ class SampleDataInitializer @Inject constructor(
             .await()
 
         Log.d(TAG, "✅ Örnek kullanıcı eklendi: ${sampleUser.username}")
+    }
+
+    /**
+     * Örnek video verileri yükle - Sadece AI oluşturulmuş videolar
+     */
+    private suspend fun loadSampleVideos() {
+        // AI oluşturulmuş videolar için placeholder - gerçek videolar backend tarafından oluşturulacak
+        Log.d(TAG, "📹 Sample video yükleme atlandı - AI videolar backend tarafından oluşturulacak")
+        
+        // Sadece örnek video generation request'leri ekleyelim
+        val sampleRequests = listOf(
+            VideoGenerationRequest(
+                id = "request_sample_001",
+                newsId = "news_001", // Mevcut haber ID'si
+                userId = "sample_user_123",
+                requestType = VideoRequestType.MANUAL,
+                config = VideoGenerationConfig(
+                    resolution = "1080p",
+                    quality = VideoQuality.HIGH,
+                    includeBackgroundMusic = true,
+                    includeSubtitles = true
+                ),
+                status = VideoGenerationStatus.PENDING, // Backend tarafından işlenecek
+                progress = 0,
+                currentStep = "Video oluşturma bekleniyor",
+                createdAt = Timestamp.now(),
+                updatedAt = Timestamp.now()
+            )
+        )
+
+        // Sadece örnek istekleri ekle - gerçek videolar backend oluşturacak
+        for (request in sampleRequests) {
+            firestore.collection(FirebaseConfig.Collections.VIDEO_GENERATION_REQUESTS)
+                .document(request.id)
+                .set(request)
+                .await()
+        }
+        
+        Log.d(TAG, "✅ Video generation request'leri eklendi - Backend işlemeye hazır")
     }
 }
 

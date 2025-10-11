@@ -458,6 +458,7 @@ private fun getIconFromString(iconName: String): ImageVector {
         "gavel" -> Icons.Default.Gavel
         "trending_up" -> Icons.Default.TrendingUp
         "computer" -> Icons.Default.Computer
+        "local_hospital" -> Icons.Default.LocalHospital
         else -> Icons.Default.Article
     }
 }

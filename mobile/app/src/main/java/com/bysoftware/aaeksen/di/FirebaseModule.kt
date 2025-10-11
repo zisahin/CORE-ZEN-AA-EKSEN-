@@ -65,6 +65,19 @@ object FirebaseModule {
     
     @Provides
     @Singleton
+    fun provideVideoRepository(
+        firestore: FirebaseFirestore
+    ): VideoRepository = VideoRepository(firestore)
+    
+    @Provides
+    @Singleton
+    fun provideGamificationRepository(
+        firestore: FirebaseFirestore,
+        auth: FirebaseAuth
+    ): GamificationRepository = GamificationRepository(firestore, auth)
+    
+    @Provides
+    @Singleton
     fun provideSampleDataInitializer(
         firestore: FirebaseFirestore
     ): SampleDataInitializer = SampleDataInitializer(firestore)

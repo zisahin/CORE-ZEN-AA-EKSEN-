@@ -35,6 +35,7 @@ import coil.compose.AsyncImage
 import com.bysoftware.aaeksen.R
 import com.bysoftware.aaeksen.data.firebase.model.FirebaseUser
 import com.bysoftware.aaeksen.data.firebase.model.UserBadge
+import com.bysoftware.aaeksen.data.firebase.model.UserProfile
 import com.bysoftware.aaeksen.presentation.profile.ProfileUiState
 import com.bysoftware.aaeksen.presentation.profile.ProfileViewModel
 
@@ -42,10 +43,14 @@ import com.bysoftware.aaeksen.presentation.profile.ProfileViewModel
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: ProfileViewModel = hiltViewModel(),
+    gamificationViewModel: com.bysoftware.aaeksen.presentation.gamification.GamificationViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val user by viewModel.user.collectAsState()
+    val userProfile by gamificationViewModel.userProfile.collectAsState()
+    val userBadges by gamificationViewModel.userBadges.collectAsState()
+    val userStats by gamificationViewModel.userStats.collectAsState()
     val scrollState = rememberScrollState()
 
     Scaffold(
@@ -115,9 +120,31 @@ fun ProfileScreen(
                     // Profil Bilgileri
                     ProfileHeader(user = user, viewModel = viewModel, navController = navController)
 
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // XP ve Seviye Kartı
+                    userProfile?.let { profile ->
+                        XPLevelCard(userProfile = profile, gamificationViewModel = gamificationViewModel)
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    // İstatistikler Kartı
+                    userProfile?.let { profile ->
+                        StatsCard(userProfile = profile)
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    // Rozetler Bölümü (Gamification)
+                    GamificationBadgesSection(userBadges = userBadges)
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Günlük Görevler Kartı
+                    DailyTasksCard(navController = navController)
+
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // Rozetler Bölümü
+                    // Orijinal Rozetler Bölümü (Firebase'den)
                     BadgesSection(user = user, viewModel = viewModel)
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -495,6 +522,294 @@ fun StatCard(
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
+            }
+        }
+    }
+}
+
+// ==================== GAMİFİCATİON BİLEŞENLERİ ====================
+
+@Composable
+fun XPLevelCard(
+    userProfile: FirebaseUser,
+    gamificationViewModel: com.bysoftware.aaeksen.presentation.gamification.GamificationViewModel
+) {
+    val currentLevel = gamificationViewModel.calculateLevelFromXP(userProfile.totalXp)
+    val nextLevelXP = gamificationViewModel.getXPForNextLevel(currentLevel)
+    val progress = gamificationViewModel.getLevelProgress(userProfile.totalXp, currentLevel)
+    
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF01447b))
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Deneyim Puanı",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Text(
+                    text = "${userProfile.totalXp} XP",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Yellow
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            // XP Progress Bar
+            Column {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Seviye $currentLevel",
+                        fontSize = 14.sp,
+                        color = Color.White.copy(alpha = 0.8f)
+                    )
+                    Text(
+                        text = "Seviye ${currentLevel + 1}",
+                        fontSize = 14.sp,
+                        color = Color.White.copy(alpha = 0.8f)
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(4.dp))
+                
+                LinearProgressIndicator(
+                    progress = progress,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .clip(RoundedCornerShape(4.dp)),
+                    color = Color.Yellow,
+                    trackColor = Color.White.copy(alpha = 0.3f)
+                )
+                
+                Spacer(modifier = Modifier.height(4.dp))
+                
+                Text(
+                    text = "Sonraki seviye için ${nextLevelXP - userProfile.totalXp} XP gerekli",
+                    fontSize = 12.sp,
+                    color = Color.White.copy(alpha = 0.7f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun StatsCard(userProfile: FirebaseUser) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = "İstatistikler",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                StatItem(
+                    icon = Icons.Filled.Add, // Article yerine Add kullanıyoruz
+                    label = "Haber",
+                    value = userProfile.newsReadCount.toString(),
+                    color = Color(0xFF4CAF50)
+                )
+                StatItem(
+                    icon = Icons.Filled.Add, // PlayArrow yerine Add kullanıyoruz
+                    label = "Video",
+                    value = "0", // Firebase'de video field'ı yok, 0 göster
+                    color = Color(0xFF2196F3)
+                )
+                StatItem(
+                    icon = Icons.Filled.Add, // Games yerine Add kullanıyoruz
+                    label = "Oyun",
+                    value = "0", // Firebase'de game field'ı yok, 0 göster
+                    color = Color(0xFF9C27B0)
+                )
+                StatItem(
+                    icon = Icons.Filled.Share,
+                    label = "Paylaşım",
+                    value = userProfile.newsSharedCount.toString(),
+                    color = Color(0xFFFF9800)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun StatItem(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    value: String,
+    color: Color
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = color,
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = value,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = color
+        )
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            color = Color.Gray
+        )
+    }
+}
+
+@Composable
+fun GamificationBadgesSection(userBadges: List<com.bysoftware.aaeksen.data.firebase.model.UserBadge>) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Kazanılan Rozetler",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "${userBadges.size} rozet",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            if (userBadges.isNotEmpty()) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(userBadges) { badge ->
+                        GamificationBadgeItem(badge = badge)
+                    }
+                }
+            } else {
+                Text(
+                    text = "Henüz rozet kazanmadınız. Görevleri tamamlayarak rozet kazanabilirsiniz!",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun GamificationBadgeItem(badge: com.bysoftware.aaeksen.data.firebase.model.UserBadge) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.width(80.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(60.dp)
+                .clip(CircleShape)
+                .background(Color(0xFFFFD700)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                Icons.Filled.Add, // EmojiEvents yerine Add kullanıyoruz
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(30.dp)
+            )
+        }
+        
+        Spacer(modifier = Modifier.height(4.dp))
+        
+        Text(
+            text = badge.name,
+            fontSize = 10.sp,
+            maxLines = 2,
+            color = Color.Gray,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun DailyTasksCard(navController: NavController) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Günlük Görevler",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Icon(
+                    Icons.Filled.Add, // Assignment yerine Add kullanıyoruz
+                    contentDescription = null,
+                    tint = Color(0xFF01447b)
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Bugünkü görevlerini tamamla ve XP kazan!",
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Button(
+                onClick = { navController.navigate("daily_tasks") },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF01447b)
+                )
+            ) {
+                Text("Görevleri Görüntüle")
             }
         }
     }

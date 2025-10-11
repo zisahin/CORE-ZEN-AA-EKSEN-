@@ -30,6 +30,7 @@ import com.bysoftware.aaeksen.ui.components.CategoryTabRow
 fun HomeScreen(
     onNewsClick: (NewsItem) -> Unit,
     onAIChatClick: () -> Unit = {},
+    onVideoListClick: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     var selectedCategory by remember { mutableStateOf("All") }
