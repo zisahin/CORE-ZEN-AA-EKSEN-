@@ -60,7 +60,7 @@ fun CustomBottomBar(
             .height(72.dp)
             .background(if (isDarkTheme) Color.Black else Color.White)
     ) {
-        val items = listOf("Neews", "Oyunlar", "Center", "Harita", "Profil")
+        val items = listOf("Neews", "Oyunlar", "Center", "Harita", "Tünel")
 
         Row(
             modifier = Modifier
@@ -104,7 +104,7 @@ fun CustomBottomBar(
                         "Neews" -> painterResource(R.drawable.discover)
                         "Oyunlar" -> painterResource(R.drawable.game)
                         "Harita" -> painterResource(R.drawable.live_2989838)
-                                "Profil" -> painterResource(R.drawable.person)
+                        "Tünel" -> painterResource(R.drawable.time_tunnel)
                         else -> painterResource(R.drawable.person)
                     }
 

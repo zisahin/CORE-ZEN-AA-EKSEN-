@@ -71,8 +71,8 @@ fun MainScreen() {
                         "Neews" -> 0
                         "Oyunlar" -> 1
                         "center" -> 2
-                        "Canlı" -> 3  // Harita
-                        "Profil" -> 4  // Profil
+                        "Harita" -> 3  // Harita (eski Canlı)
+                        "Tünel", "time_tunnel" -> 4   // Tünel (eski Profil)
                         else -> 2
                     },
                     isDarkTheme = isDarkTheme,
@@ -81,8 +81,8 @@ fun MainScreen() {
                             0 -> "Neews"
                             1 -> "Oyunlar"
                             2 -> "center"
-                            3 -> "Canlı"  // Harita butonu → NewsMapScreen
-                            4 -> "Profil" // Profil ekranı
+                            3 -> "Harita"     // Harita butonu → NewsMapScreen
+                            4 -> "time_tunnel" // Tünel → Time Tunnel ekranı
                             else -> "center"
                         }
                         navController.navigate(route) {

@@ -505,6 +505,7 @@ fun StatCard(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .height(150.dp)
                 .padding(16.dp),
             contentAlignment = Alignment.CenterStart
         ) {

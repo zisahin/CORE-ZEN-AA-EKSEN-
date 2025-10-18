@@ -40,8 +40,10 @@ fun AppNavigation(
         composable("Neews") {
             ShortsScreen(
                 onNavigateToNews = { videoId ->
-                    // Navigate to news detail based on video
-                    navController.navigate("news_detail/1") // Mock news ID for now
+                    // Video'nun description'ını news content olarak kullan
+                    // Şimdilik rastgele bir news ID ile navigation yap
+                    val newsId = listOf("1", "2", "3", "4").random()
+                    navController.navigate("news_detail/$newsId")
                 },
                 onShareVideo = { videoId ->
                     // Handle video sharing (could open share dialog)
@@ -77,6 +79,12 @@ fun AppNavigation(
                         },
                         onVideoListClick = {
                             navController.navigate("video_list")
+                        },
+                        onProfileClick = {
+                            navController.navigate("profile")
+                        },
+                        onVideoGeneratorClick = {
+                            navController.navigate("video_generation")
                         }
                     )
                 }
@@ -89,7 +97,7 @@ fun AppNavigation(
             )
         }
         
-        composable("Canlı") {
+        composable("Harita") {
             NewsMapScreen(
                 onCategoryNewsClick = { cityName, categoryName ->
                     navController.navigate("city_news/$cityName/$categoryName")
@@ -118,6 +126,10 @@ fun AppNavigation(
             TimeTunnelCategoriesScreen(navController = navController)
         }
         
+        composable("Tünel") {
+            TimeTunnelCategoriesScreen(navController = navController)
+        }
+        
         composable("time_tunnel_detail/{categoryId}") { backStackEntry ->
             val categoryId = backStackEntry.arguments?.getString("categoryId") ?: ""
             TimeTunnelDetailScreen(
@@ -125,7 +137,7 @@ fun AppNavigation(
                 categoryId = categoryId
             )
         }
-                composable("Profil") {
+                composable("profile") {
                     ProfileScreen(navController = navController)
                 }
 

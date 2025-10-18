@@ -3,8 +3,8 @@ package com.bysoftware.aaeksen.ui.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.VideoCall
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,7 +15,10 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar() {
+fun TopBar(
+    onProfileClick: () -> Unit = {},
+    onVideoGeneratorClick: () -> Unit = {}
+) {
     TopAppBar(
         title = { },
         navigationIcon = {
@@ -28,17 +31,17 @@ fun TopBar() {
             }
         },
         actions = {
-            IconButton(onClick = { }) {
+            IconButton(onClick = onVideoGeneratorClick) {
                 Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search",
+                    imageVector = Icons.Default.VideoCall,
+                    contentDescription = "Video Generator",
                     tint = Color.Black
                 )
             }
-            IconButton(onClick = { }) {
+            IconButton(onClick = onProfileClick) {
                 Icon(
-                    imageVector = Icons.Default.Notifications,
-                    contentDescription = "Notifications",
+                    imageVector = Icons.Default.Person,
+                    contentDescription = "Profile",
                     tint = Color.Black
                 )
             }

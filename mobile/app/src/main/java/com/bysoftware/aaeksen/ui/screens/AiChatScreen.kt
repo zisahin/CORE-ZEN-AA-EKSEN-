@@ -266,15 +266,16 @@ fun AiChatScreen(
                                 .weight(1f)
                                 .clickable(
                 onClick = {   },
-                indication = null,
+                                    indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ),
-                            shape = RoundedCornerShape(20.dp),
+                                    shape = RoundedCornerShape(20.dp),
                             colors = CardDefaults.cardColors(
                                 containerColor = Color.White.copy(alpha = 0.8f)
                             ),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                        ) {
+                            elevation = CardDefaults.cardElevation(defaultElevation = -1.dp),
+
+                            ) {
                             Column(
                                 modifier = Modifier.padding(20.dp)
                             ) {
